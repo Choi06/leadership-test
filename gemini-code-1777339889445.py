@@ -244,39 +244,38 @@ elif st.session_state.page == 'result':
 elif st.session_state.page == 'dictionary':
     st.header("📚 리더십 대백과사전")
     
-    # [수정] 모바일에서도 가로 배치를 강제하는 CSS 추가
+    # [수정] 모바일에서 버튼이 세로로 쌓이는 것을 원천 차단하는 CSS
     st.markdown("""
         <style>
-        .horizontal-menu {
-            display: flex;
-            justify-content: space-between;
-            gap: 5px;
-            margin-bottom: 20px;
+        /* 모든 기기에서 컬럼이 세로로 쏟아지는 것을 방지 */
+        [data-testid="column"] {
+            width: calc(25% - 10px) !important;
+            flex: 1 1 calc(25% - 10px) !important;
+            min-width: 60px !important;
         }
-        .menu-item {
-            flex: 1;
-        }
-        /* 스트림릿 버튼이 모바일에서 100% 차는 것을 방지 */
-        div[data-testid="column"] {
-            min-width: 0 !important;
-            flex-basis: 23% !important;
+        /* 버튼 텍스트 크기 조절 (모바일 배려) */
+        .stButton>button {
+            font-size: 0.8rem !important;
+            padding: 0px !important;
         }
         </style>
     """, unsafe_allow_html=True)
 
-    # 가로 배치를 위해 컬럼 생성 시 gap을 줄임
-    tabs = st.columns(4)
-    names = ["정주영", "이병철", "구인회", "박태준"]
-    keys = ["Pioneer", "Architect", "Harmonizer", "Steward"]
+    # 4개의 열을 만들되, gap을 최소화합니다.
+    col1, col2, col3, col4 = st.columns(4)
     
-    for i in range(4):
-        with tabs[i]:
-            # 버튼 안의 글자가 잘리지 않도록 이름을 성 제외하고 넣거나 폰트 조절
-            if st.button(names[i]): 
-                st.session_state.selected_leader = keys[i]
-            
-    # --- 인물 정보 표시 로직은 동일 ---
+    with col1:
+        if st.button("정주영"): st.session_state.selected_leader = 'Pioneer'
+    with col2:
+        if st.button("이병철"): st.session_state.selected_leader = 'Architect'
+    with col3:
+        if st.button("구인회"): st.session_state.selected_leader = 'Harmonizer'
+    with col4:
+        if st.button("박태준"): st.session_state.selected_leader = 'Steward'
+
+    # --- 여기서부터는 기존 인물 정보 출력 코드와 동일합니다 ---
     info = leaders_info[st.session_state.selected_leader]
+    
     st.markdown(f'<div class="motto-box">{info["motto"]}</div>', unsafe_allow_html=True)
     display_leader_image(info['img'])
     
