@@ -244,55 +244,48 @@ elif st.session_state.page == 'result':
 elif st.session_state.page == 'dictionary':
     st.header("📚 리더십 대백과사전")
     
-    # [최종] 모바일 고려 + 가로 4열 강제 + 도형 크기 최적화
+    # [최종 패치] 페이지 이탈 방지 및 2x2 그리드 스타일
     st.markdown("""
         <style>
-        /* 1. 모바일에서도 4열이 아래로 떨어지지 않도록 강제 배치 */
-        [data-testid="stHorizontalBlock"] {
-            display: flex !important;
-            flex-direction: row !important;
-            flex-wrap: nowrap !important;
-            gap: 5px !important; /* 버튼 사이 간격을 좁혀서 도형 공간 확보 */
-        }
-
+        /* 1. 버튼이 페이지 밖으로 나가는 것 방지 */
         [data-testid="column"] {
-            flex: 1 1 25% !important;
-            min-width: 0px !important;
+            width: 100% !important;
         }
         
-        /* 2. 버튼 도형 크기 최적화 (여백 줄이고 텍스트 정렬) */
+        /* 2. 버튼 디자인 최적화 (큼직하고 깔끔하게) */
         .stButton>button {
             width: 100% !important;
-            height: 3.5rem !important;    /* 충분한 높이 확보 */
-            padding: 0px !important;      /* 내부 여백을 없애서 도형이 꽉 차게 */
-            font-size: 0.85rem !important; /* 모바일에서 글자가 잘리지 않는 적정 크기 */
-            font-weight: 700 !important;
-            border-radius: 12px !important;
-            white-space: nowrap !important;
-            overflow: hidden;
-            text-overflow: ellipsis;      /* 혹시 글자가 길면 말줄임표 처리 */
+            height: 4rem !important;
+            font-size: 1.05rem !important; /* 글자 크기 시원하게 */
+            font-weight: 800 !important;
+            border-radius: 15px !important;
+            margin-bottom: 5px !important;
+            border: 1.5px solid #004A7C !important;
+            background-color: #ffffff !important;
+            color: #004A7C !important;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05) !important;
         }
-
-        /* 3. 버튼 하단 여백 제거 */
-        .element-container:has(button) { margin-bottom: 0px !important; }
+        
+        /* 3. 버튼 클릭 시 반응형 효과 */
+        .stButton>button:active {
+            transform: scale(0.98);
+            background-color: #F0F4F8 !important;
+        }
         </style>
     """, unsafe_allow_html=True)
 
-    # 4개의 열 생성
-    c1, c2, c3, c4 = st.columns(4)
-    
-    with c1:
-        if st.button("정주영"): st.session_state.selected_leader = 'Pioneer'
-    with c2:
-        if st.button("이병철"): st.session_state.selected_leader = 'Architect'
-    with c3:
-        if st.button("구인회"): st.session_state.selected_leader = 'Harmonizer'
-    with c4:
-        if st.button("박태준"): st.session_state.selected_leader = 'Steward'
+    # 2x2 그리드 배치 (페이지 폭을 벗어나지 않는 가장 안정적인 구조)
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("🚜 정주영"): st.session_state.selected_leader = 'Pioneer'
+        if st.button("🤝 구인회"): st.session_state.selected_leader = 'Harmonizer'
+    with col2:
+        if st.button("💻 이병철"): st.session_state.selected_leader = 'Architect'
+        if st.button("🏗️ 박태준"): st.session_state.selected_leader = 'Steward'
 
     st.write("---")
 
-    # 인물 정보 출력 (기존 완성된 디자인 유지)
+    # 선택된 인물 정보 출력 (일체화 디자인 유지)
     info = leaders_info[st.session_state.selected_leader]
     
     st.markdown(f'<div class="motto-box">{info["motto"]}</div>', unsafe_allow_html=True)
@@ -313,4 +306,4 @@ elif st.session_state.page == 'dictionary':
     st.markdown('</div>', unsafe_allow_html=True)
     
     st.write("<br>", unsafe_allow_html=True)
-    if st.button("홈으로 돌아가기"): go_to('home')
+    if st.button("🏠 홈으로 돌아가기"): go_to('home')
