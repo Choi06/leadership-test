@@ -53,7 +53,7 @@ st.markdown(f"""
         
         /* [핵심] 좌우 여백을 주어 인물 사진 크기처럼 조정 */
         margin: 20px auto !important; 
-        width: 90%; 
+        width: 95%; 
         
         /* 텍스트 가독성 */
         color: white !important; 
