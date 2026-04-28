@@ -71,7 +71,7 @@ st.markdown("""
     border-radius: 18px !important; 
     
     /* 외곽선 추가: 2px 두께, 실선(solid), 파란색(#004A7C) 예시 */
-    border: 2px solid #004A7C !important; 
+    border: 2px solid #331f00 !important; 
     
     background-color: #F5F5DC !important; 
     color: #004A7C !important; /* 배경이 밝은 베이지색이므로 글자색도 진하게 변경 제안 */
