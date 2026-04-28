@@ -244,33 +244,53 @@ elif st.session_state.page == 'result':
 elif st.session_state.page == 'dictionary':
     st.header("📚 리더십 대백과사전")
     
-    # 2x2 버튼 배치는 그대로 유지
-    row1_col1, row1_col2 = st.columns(2)
-    row2_col1, row2_col2 = st.columns(2)
-    with row1_col1:
-        if st.button("정주영 (현대)"): st.session_state.selected_leader = 'Pioneer'
-    with row1_col2:
-        if st.button("이병철 (삼성)"): st.session_state.selected_leader = 'Architect'
-    with row2_col1:
-        if st.button("구인회 (LG)"): st.session_state.selected_leader = 'Harmonizer'
-    with row2_col2:
-        if st.button("박태준 (포스코)"): st.session_state.selected_leader = 'Steward'
+    # [강력 수정] 모바일 가로 4열 배열을 절대적으로 강제하는 CSS
+    st.markdown("""
+        <style>
+        /* 1. 컬럼이 세로로 쏟아지는 반응형 동작을 강제로 차단 */
+        [data-testid="column"] {
+            width: 24% !important; /* 4개가 한 줄에 오도록 25%보다 약간 작게 설정 */
+            flex: 0 0 24% !important;
+            min-width: 0px !important; /* 모바일의 최소 너비 제한을 해제 */
+        }
+        
+        /* 2. 버튼 내부 텍스트 크기 및 간격 미세 조정 (모바일 가독성) */
+        .stButton>button {
+            font-size: 0.75rem !important; /* 글자 크기를 살짝 줄임 */
+            padding: 0px !important;
+            height: 3.2rem !important;
+            border-radius: 12px !important;
+        }
+
+        /* 3. 버튼과 사진 사이 여백 제거 */
+        .element-container:has(button) { margin-bottom: -10px !important; }
+        .element-container:has(img) { margin-top: -15px !important; }
+        hr { margin: 10px 0 !important; }
+        </style>
+    """, unsafe_allow_html=True)
+
+    # 4개의 열 생성
+    c1, c2, c3, c4 = st.columns(4)
+    
+    with c1:
+        if st.button("정주영"): st.session_state.selected_leader = 'Pioneer'
+    with c2:
+        if st.button("이병철"): st.session_state.selected_leader = 'Architect'
+    with c3:
+        if st.button("구인회"): st.session_state.selected_leader = 'Harmonizer'
+    with c4:
+        if st.button("박태준"): st.session_state.selected_leader = 'Steward'
 
     st.write("---")
 
+    # 선택된 인물 정보 출력 (이전 일체화 디자인 유지)
     info = leaders_info[st.session_state.selected_leader]
     
-    # [수정 포인트 1] 좌우명은 독립된 박스로 상단 배치
     st.markdown(f'<div class="motto-box">{info["motto"]}</div>', unsafe_allow_html=True)
     
-    # [수정 포인트 2] 카드 시작 전에 이미지를 먼저 배치하거나 카드 안에 포함
-    # 여기서는 사진과 글을 하나의 하얀 카드(.bio-card) 안에 묶어서 일체감을 줍니다.
     st.markdown('<div class="bio-card">', unsafe_allow_html=True)
-    
-    # 카드 내부에서 사진 출력 (카드 테두리 안에 사진이 들어감)
     display_leader_image(info['img'])
     
-    # 상세 내용
     st.markdown(f'<div class="section-header">📍 1. 그의 생애 ({info["name"]})</div>', unsafe_allow_html=True)
     st.markdown(f'<p style="line-height:1.7; margin-bottom:20px;">{info["bio"]}</p>', unsafe_allow_html=True)
     
@@ -281,9 +301,7 @@ elif st.session_state.page == 'dictionary':
     hashtags = info["hashtags"]
     if isinstance(hashtags, list): hashtags = " ".join(hashtags)
     st.markdown(f'<p style="font-weight:700; color:#555;">{hashtags}</p>', unsafe_allow_html=True)
-    
-    st.markdown('</div>', unsafe_allow_html=True) # 카드 닫기
+    st.markdown('</div>', unsafe_allow_html=True)
     
     st.write("<br>", unsafe_allow_html=True)
-    if st.button("홈으로 돌아가기"): 
-        go_to('home')
+    if st.button("홈으로 돌아가기"): go_to('home')
