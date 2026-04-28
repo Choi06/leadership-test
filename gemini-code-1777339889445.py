@@ -17,18 +17,30 @@ st.markdown("""
     }
     .stApp { background-color: #F8F9FB; }
     
-    /* 시작 화면 Hero */
-    .hero-section { /* 시작 화면 Hero */
-
-    .hero-section {
-        background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
-                          url("https://i.namu.wiki/i/IpVSj-BLH7WtjivfEInwSes-HO22iclfabXs6xh5dm8vJ_W5mXV9QTvPoIFFiLC2M4g2p_lQk0zWMgnAw09LXA.svg");
-        background-size: cover; background-position: center;
-        height: 350px; display: flex; flex-direction: column;
-        justify-content: center; align-items: center;
-        border-radius: 0 0 40px 40px; margin: -6rem -2rem 2rem -2rem;
-        color: white; text-align: center; padding: 20px;
-    }
+/* 시작 화면 Hero */
+.hero-section {
+    /* 1. 이미지 주소 변경 (나무위키 링크 대신 직접 경로 사용 권장) */
+    background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
+                      url("https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80");
+    
+    background-size: cover; 
+    background-position: center;
+    
+    /* 2. 크기 및 위치 조정 (위쪽 잘림 방지, 좌우 여백 확보) */
+    height: 250px; 
+    display: flex; 
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center;
+    
+    /* 3. 테두리 전체 곡선 및 마진(여백) */
+    border-radius: 20px; 
+    margin: 1rem 0rem 2rem 0rem; 
+    
+    color: white; 
+    text-align: center; 
+    padding: 20px;
+}
 
     /* 설문지 카드 */
     .q-card {
