@@ -222,7 +222,7 @@ elif st.session_state.page == 'survey':
 
     # [수정] 버튼 배치: 다음(위쪽), 홈으로(아래쪽)
     if step < 4:
-        if st.button("다음 페이지로 이동 ➡️"): 
+        if st.button("다음 ➡️"): 
             st.session_state.survey_step += 1
             st.rerun()
     else:
@@ -238,7 +238,7 @@ elif st.session_state.page == 'survey':
             go_to('result')
 
     # 홈으로 버튼은 아래쪽에 배치 (오른쪽 정렬 느낌을 원하시면 사이드바나 여백 활용도 가능하지만 위아래가 깔끔합니다)
-    if st.button("⬅️ 메인 홈으로 돌아가기"): 
+    if st.button("홈으로"): 
         go_to('home')
 
 elif st.session_state.page == 'dictionary':
