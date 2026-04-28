@@ -246,34 +246,44 @@ elif st.session_state.page == 'dictionary':
     
     st.markdown("""
         <style>
-        /* 1. 컬럼 가로 배치 강제 유지 */
+        /* 1. 페이지 전체 좌우 여백 축소 (버튼이 더 넓어질 공간 확보) */
+        .block-container {
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
+        }
+
+        /* 2. 컬럼 가로 4열 강제 유지 (여백 최소화) */
         [data-testid="column"] {
-            width: 24% !important;
-            flex: 0 0 24% !important;
+            width: 24.5% !important;
+            flex: 0 0 24.5% !important;
             min-width: 0px !important;
         }
         
-        /* 2. 버튼 크기 및 폰트 최적화 */
+        /* 3. 버튼 가로 폭 꽉 채우기 및 높이 조정 */
         .stButton>button {
-            font-size: 0.9rem !important; /* 글자 크기를 다시 키움 */
+            width: 100% !important;
+            font-size: 0.95rem !important; /* 글자 크기 시원하게 확대 */
             font-weight: 800 !important;
-            height: 4.5rem !important;    /* 높이를 대폭 키워 터치 영역 확보 */
-            padding: 5px !important;
-            line-height: 1.2 !important;
-            border-radius: 15px !important;
+            height: 3.8rem !important;    
+            padding: 0px !important;
+            border-radius: 12px !important;
+            border: 1.5px solid #004A7C !important;
             background-color: #ffffff !important;
-            border: 2px solid #004A7C !important; /* 테두리를 두껍게 해서 더 커 보이게 함 */
         }
 
-        /* 여백 조절 */
+        /* 버튼 사이의 간격 조정 */
+        [data-testid="stHorizontalBlock"] {
+            gap: 5px !important;
+        }
+
+        /* 여백 미세 조정 */
         .element-container:has(button) { margin-bottom: -5px !important; }
-        .element-container:has(img) { margin-top: -10px !important; }
-        hr { margin: 15px 0 !important; }
+        hr { margin: 10px 0 !important; }
         </style>
     """, unsafe_allow_html=True)
 
-    # 4개의 열 생성
-    c1, c2, c3, c4 = st.columns(4)
+    # 4개의 열 생성 (gap을 최소로 설정)
+    c1, c2, c3, c4 = st.columns(4, gap="small")
     
     with c1:
         if st.button("정주영"): st.session_state.selected_leader = 'Pioneer'
@@ -286,11 +296,10 @@ elif st.session_state.page == 'dictionary':
 
     st.write("---")
 
-    # 인물 정보 출력 (일체화 디자인)
+    # 인물 정보 출력 로직 (이후 동일)
     info = leaders_info[st.session_state.selected_leader]
     
     st.markdown(f'<div class="motto-box">{info["motto"]}</div>', unsafe_allow_html=True)
-    
     st.markdown('<div class="bio-card">', unsafe_allow_html=True)
     display_leader_image(info['img'])
     
