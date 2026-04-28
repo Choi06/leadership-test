@@ -244,28 +244,31 @@ elif st.session_state.page == 'result':
 elif st.session_state.page == 'dictionary':
     st.header("📚 리더십 대백과사전")
     
-    # [강력 수정] 모바일 가로 4열 배열을 절대적으로 강제하는 CSS
     st.markdown("""
         <style>
-        /* 1. 컬럼이 세로로 쏟아지는 반응형 동작을 강제로 차단 */
+        /* 1. 컬럼 가로 배치 강제 유지 */
         [data-testid="column"] {
-            width: 24% !important; /* 4개가 한 줄에 오도록 25%보다 약간 작게 설정 */
+            width: 24% !important;
             flex: 0 0 24% !important;
-            min-width: 0px !important; /* 모바일의 최소 너비 제한을 해제 */
+            min-width: 0px !important;
         }
         
-        /* 2. 버튼 내부 텍스트 크기 및 간격 미세 조정 (모바일 가독성) */
+        /* 2. 버튼 크기 및 폰트 최적화 */
         .stButton>button {
-            font-size: 0.75rem !important; /* 글자 크기를 살짝 줄임 */
-            padding: 0px !important;
-            height: 3.2rem !important;
-            border-radius: 12px !important;
+            font-size: 0.9rem !important; /* 글자 크기를 다시 키움 */
+            font-weight: 800 !important;
+            height: 4.5rem !important;    /* 높이를 대폭 키워 터치 영역 확보 */
+            padding: 5px !important;
+            line-height: 1.2 !important;
+            border-radius: 15px !important;
+            background-color: #ffffff !important;
+            border: 2px solid #004A7C !important; /* 테두리를 두껍게 해서 더 커 보이게 함 */
         }
 
-        /* 3. 버튼과 사진 사이 여백 제거 */
-        .element-container:has(button) { margin-bottom: -10px !important; }
-        .element-container:has(img) { margin-top: -15px !important; }
-        hr { margin: 10px 0 !important; }
+        /* 여백 조절 */
+        .element-container:has(button) { margin-bottom: -5px !important; }
+        .element-container:has(img) { margin-top: -10px !important; }
+        hr { margin: 15px 0 !important; }
         </style>
     """, unsafe_allow_html=True)
 
@@ -283,7 +286,7 @@ elif st.session_state.page == 'dictionary':
 
     st.write("---")
 
-    # 선택된 인물 정보 출력 (이전 일체화 디자인 유지)
+    # 인물 정보 출력 (일체화 디자인)
     info = leaders_info[st.session_state.selected_leader]
     
     st.markdown(f'<div class="motto-box">{info["motto"]}</div>', unsafe_allow_html=True)
