@@ -62,13 +62,13 @@ st.markdown("""
     }
     .section-header {
         font-size: 1.1rem; font-weight: 700; color: #004A7C;
-        margin-top: 25px; margin-bottom: 10px; border-left: 5px solid #004A7C; padding-left: 12px;
+        margin-top: 25px; margin-bottom: 10px; border-left: 5px solid #F5F5DC; padding-left: 12px;
     }
 
     /* 일반 버튼 */
     .stButton>button {
         width: 100%; border-radius: 18px !important; border: none !important;
-        background-color: #004A7C !important; color: white !important; height: 3.5rem;
+        background-color: #F5F5DC !important; color: white !important; height: 3.5rem;
         font-weight: 700; box-shadow: 0 8px 15px rgba(0,74,124,0.1);
     }
 </style>
@@ -213,13 +213,13 @@ elif st.session_state.page == 'dictionary':
     display_leader_image(info['img']) # 2. 사진
     
     st.markdown('<div class="bio-card">', unsafe_allow_html=True)
-    st.markdown(f'<div class="section-header">📍 3. 그의 생애 ({info["name"]})</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="section-header">📍 1. 그의 생애 ({info["name"]})</div>', unsafe_allow_html=True)
     st.markdown(f'<p style="line-height:1.7;">{info["bio"]}</p>', unsafe_allow_html=True)
     
-    st.markdown('<div class="section-header">💡 4. 리더십 성공 사례</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-header">💡 2. 리더십 성공 사례</div>', unsafe_allow_html=True)
     st.markdown(f'<p style="line-height:1.7;">{info["case"]}</p>', unsafe_allow_html=True)
     
-    st.markdown('<div class="section-header">🏷️ 5. 리더십 키워드</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-header">🏷️ 3. 리더십 키워드</div>', unsafe_allow_html=True)
     st.markdown(f'<p style="font-weight:700; color:#555;">{info["hashtags"]}</p>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
     
