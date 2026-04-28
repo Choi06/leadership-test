@@ -218,23 +218,28 @@ elif st.session_state.page == 'survey':
         st.markdown(f'<div class="q-card"><div class="q-title">QUESTION {i+1}</div>{questions[i]["q"]}</div>', unsafe_allow_html=True)
         st.session_state.answers[i] = st.radio("선택", [questions[i]['a'], questions[i]['b'], questions[i]['c'], questions[i]['d']], key=f"q{i}", label_visibility="collapsed")
     
+    # [수정] 버튼 순서 변경: 홈으로(왼쪽), 다음/결과(오른쪽)
     col1, col2 = st.columns(2)
-    if col1.button("홈으로"): go_to('home')
-    if step < 4:
-        if col2.button("다음 ➡️"): 
-            st.session_state.survey_step += 1
-            st.rerun()
-    else:
-        if col2.button("결과 보기 🏆"):
-            s = {"Pioneer":0, "Architect":0, "Harmonizer":0, "Steward":0}
-            for j in range(20):
-                ans = st.session_state.answers.get(j)
-                if ans == questions[j]['a']: s["Pioneer"]+=1
-                elif ans == questions[j]['b']: s["Architect"]+=1
-                elif ans == questions[j]['c']: s["Harmonizer"]+=1
-                elif ans == questions[j]['d']: s["Steward"]+=1
-            st.session_state.final_results = s
-            go_to('result')
+    with col1:
+        if st.button("⬅️ 홈으로"): 
+            go_to('home')
+    with col2:
+        if step < 4:
+            if st.button("다음 ➡️"): 
+                st.session_state.survey_step += 1
+                st.rerun()
+        else:
+            if st.button("결과 확인하기 🏆"):
+                # 점수 집계 로직
+                s = {"Pioneer":0, "Architect":0, "Harmonizer":0, "Steward":0}
+                for j in range(20):
+                    ans = st.session_state.answers.get(j)
+                    if ans == questions[j]['a']: s["Pioneer"]+=1
+                    elif ans == questions[j]['b']: s["Architect"]+=1
+                    elif ans == questions[j]['c']: s["Harmonizer"]+=1
+                    elif ans == questions[j]['d']: s["Steward"]+=1
+                st.session_state.final_results = s
+                go_to('result')
 
 elif st.session_state.page == 'result':
     st.header("🏆 당신의 리더십 모델")
