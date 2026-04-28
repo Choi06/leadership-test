@@ -52,7 +52,7 @@ st.markdown(f"""
         border-radius: 25px !important; 
         
         /* [핵심] 좌우 여백을 주어 인물 사진 크기처럼 조정 */
-        margin: 20px auto !important; 
+        margin: 10px auto !important; 
         width: 95%; 
         
         /* 텍스트 가독성 */
