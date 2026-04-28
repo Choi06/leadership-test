@@ -18,7 +18,7 @@ st.markdown("""
     .stApp { background-color: #F8F9FB; }
     
 /* 시작 화면 Hero */
-.hero-section {
+    .hero-section {
     /* 1. 이미지 주소 변경 (나무위키 링크 대신 직접 경로 사용 권장) */
     background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
                       url("https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80");
