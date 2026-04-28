@@ -18,35 +18,17 @@ st.markdown("""
     .stApp { background-color: #F8F9FB; }
     
     /* 시작 화면 Hero */
-    .hero-section {background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
-                      url("https://i.namu.wiki/i/IpVSj-BLH7WtjivfEInwSes-HO22iclfabXs6xh5dm8vJ_W5mXV9QTvPoIFFiLC2M4g2p_lQk0zWMgnAw09LXA.svg");
-    background-size: cover; 
-    background-position: center;
-    
-    /* 1. 높이를 적절하게 조절 (취향에 따라 200~250px) */
-    height: 250px; 
-    
-    display: flex; 
-    flex-direction: column;
-    justify-content: center; 
-    align-items: center;
-    
-    /* 2. 사방을 둥글게 처리하여 카드 느낌 부여 */
-    border-radius: 20px; 
-    
-    /* 3. 마진 수정: 
-       상단(1rem): 위쪽 잘림 방지 및 여백 확보
-       좌우(0): 대신 padding이나 외부 컨테이너에 의해 여백이 생기도록 설정
-       만약 강제로 좌우 여백을 더 주고 싶다면 0 대신 1rem 등으로 변경 가능 */
-    margin: 1rem 0rem 2rem 0rem; 
-    
-    color: white; 
-    text-align: center; 
-    padding: 20px;
-    
-    /* 4. (선택사항) 좀 더 입체감을 주고 싶다면 그림자 추가 */
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-}
+    .hero-section { /* 시작 화면 Hero */
+
+    .hero-section {
+        background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
+                          url("https://i.namu.wiki/i/IpVSj-BLH7WtjivfEInwSes-HO22iclfabXs6xh5dm8vJ_W5mXV9QTvPoIFFiLC2M4g2p_lQk0zWMgnAw09LXA.svg");
+        background-size: cover; background-position: center;
+        height: 350px; display: flex; flex-direction: column;
+        justify-content: center; align-items: center;
+        border-radius: 0 0 40px 40px; margin: -6rem -2rem 2rem -2rem;
+        color: white; text-align: center; padding: 20px;
+    }
 
     /* 설문지 카드 */
     .q-card {
