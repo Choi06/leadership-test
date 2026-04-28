@@ -20,7 +20,7 @@ st.markdown("""
     /* 시작 화면 Hero */
     .hero-section {
         background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
-                          url("https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2000");
+                          url("https://i.namu.wiki/i/IpVSj-BLH7WtjivfEInwSes-HO22iclfabXs6xh5dm8vJ_W5mXV9QTvPoIFFiLC2M4g2p_lQk0zWMgnAw09LXA.svg");
         background-size: cover; background-position: center;
         height: 350px; display: flex; flex-direction: column;
         justify-content: center; align-items: center;
@@ -53,7 +53,7 @@ st.markdown("""
         font-size: 1.2rem;
         color: #004A7C;
         margin-bottom: 20px;
-        border: 1px solid #D1D9E0;
+        border: 1.5px solid #D1D9E0;
     }
 
     .bio-card {
@@ -71,9 +71,9 @@ st.markdown("""
     border-radius: 18px !important; 
     
     /* 외곽선 추가: 2px 두께, 실선(solid), 파란색(#004A7C) 예시 */
-    border: 2px solid #331f00 !important; 
+    border: 1.5px solid #331f00 !important; 
     
-    background-color: #F5F5DC !important; 
+    background-color: #ffffff !important; 
     color: #004A7C !important; /* 배경이 밝은 베이지색이므로 글자색도 진하게 변경 제안 */
     height: 3.5rem;
     font-weight: 700; 
