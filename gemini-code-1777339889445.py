@@ -224,67 +224,40 @@ elif st.session_state.page == 'survey':
         go_to('home')
 
 # [추가된 섹션] 결과 화면
+elif st.session_state.page == 'result':
+    st.header("🏆 당신의 리더십 모델")
+    res = st.session_state.final_results
+    if res:
+        res_type = max(res, key=res.get)
+        leader = leaders_info[res_type]
+        
+        st.markdown(f'<div class="motto-box">나의 리더십 모델: {leader["name"]}</div>', unsafe_allow_html=True)
+        display_leader_image(leader['img'])
+        st.markdown(f'<div class="bio-card"><p>{leader["bio"]}</p></div>', unsafe_allow_html=True)
+        
+        fig = go.Figure(data=go.Scatterpolar(r=[res['Pioneer'], res['Architect'], res['Harmonizer'], res['Steward']], theta=['개척', '설계', '화합', '원칙'], fill='toself', line=dict(color='#004A7C')))
+        fig.update_layout(polar=dict(radialaxis=dict(visible=False, range=[0, 10])), showlegend=False)
+        st.plotly_chart(fig, config={'staticPlot': True}, use_container_width=True)
+    
+    if st.button("홈으로 돌아가기"): go_to('home')
+
 elif st.session_state.page == 'dictionary':
     st.header("📚 리더십 대백과사전")
-    
-    # [수정] 모바일 가로 배치를 위한 전용 스타일
-    st.markdown("""
-        <style>
-        /* 가로로 버튼을 나열하는 컨테이너 */
-        .nav-wrapper {
-            display: flex;
-            flex-wrap: nowrap;
-            justify-content: space-between;
-            gap: 8px;
-            margin-bottom: 20px;
-            width: 100%;
-        }
-        /* 개별 버튼 공간 */
-        .nav-item {
-            flex: 1;
-            min-width: 0;
-        }
-        /* 스트림릿 버튼 내부 스타일 강제 조정 */
-        .nav-item button {
-            width: 100% !important;
-            padding: 0px !important;
-            font-size: 0.85rem !important;
-            height: 3rem !important;
-            white-space: nowrap !important;
-        }
-        </style>
-    """, unsafe_allow_html=True)
-
-    # --- [핵심] 컬럼을 쓰지 않고 버튼을 가로로 강제 배치 ---
-    # container를 사용하여 버튼들을 감쌉니다.
-    with st.container():
-        # HTML 구조를 먼저 잡고, 그 안에 스트림릿 버튼을 넣기 위해 컬럼의 '너비'를 고정합니다.
-        # st.columns의 gap 매개변수를 'small'로 고정하고 레이아웃을 'fixed'처럼 작동하게 합니다.
-        c1, c2, c3, c4 = st.columns(4, gap="small")
-        
-        with c1:
-            if st.button("정주영", key="btn1"): st.session_state.selected_leader = 'Pioneer'
-        with c2:
-            if st.button("이병철", key="btn2"): st.session_state.selected_leader = 'Architect'
-        with c3:
-            if st.button("구인회", key="btn3"): st.session_state.selected_leader = 'Harmonizer'
-        with c4:
-            if st.button("박태준", key="btn4"): st.session_state.selected_leader = 'Steward'
-
-    # --- 인물 정보 출력 (이전과 동일) ---
+    tabs = st.columns(4)
+    names = ["정주영", "이병철", "구인회", "박태준"]
+    keys = ["Pioneer", "Architect", "Harmonizer", "Steward"]
+    for i in range(4):
+        if tabs[i].button(names[i]): st.session_state.selected_leader = keys[i]
+            
     info = leaders_info[st.session_state.selected_leader]
-    
     st.markdown(f'<div class="motto-box">{info["motto"]}</div>', unsafe_allow_html=True)
     display_leader_image(info['img'])
-    
     st.markdown('<div class="bio-card">', unsafe_allow_html=True)
     st.markdown(f'<div class="section-header">📍 1. 그의 생애 ({info["name"]})</div>', unsafe_allow_html=True)
     st.markdown(f'<p style="line-height:1.7;">{info["bio"]}</p>', unsafe_allow_html=True)
     st.markdown(f'<div class="section-header">💡 2. 리더십 성공 사례</div>', unsafe_allow_html=True)
     st.markdown(f'<p style="line-height:1.7;">{info["case"]}</p>', unsafe_allow_html=True)
     st.markdown(f'<div class="section-header">🏷️ 3. 리더십 키워드</div>', unsafe_allow_html=True)
-    st.markdown(f'<p style="font-weight:700; color:#555;">{" ".join(info["hashtags"])}</p>', unsafe_allow_html=True)
+    st.markdown(f'<p style="font-weight:700; color:#555;">{info["hashtags"]}</p>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
-    
-    st.write("<br>", unsafe_allow_html=True)
     if st.button("홈으로 돌아가기"): go_to('home')
