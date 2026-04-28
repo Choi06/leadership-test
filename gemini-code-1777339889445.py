@@ -3,7 +3,6 @@ import pandas as pd
 import plotly.graph_objects as go
 from PIL import Image
 import os
-
 # --- 1. 앱 스타일 세팅 ---
 st.set_page_config(page_title="K-Leadership Insight", layout="centered")
 
@@ -17,30 +16,24 @@ st.markdown("""
     }
     .stApp { background-color: #F8F9FB; }
     
-/* 시작 화면 Hero */
+    /* 시작 화면 Hero */
     .hero-section {
-    /* 1. 이미지 주소 변경 (나무위키 링크 대신 직접 경로 사용 권장) */
-    background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
-                      url("https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80");
-    
-    background-size: cover; 
-    background-position: center;
-    
-    /* 2. 크기 및 위치 조정 (위쪽 잘림 방지, 좌우 여백 확보) */
-    height: 250px; 
-    display: flex; 
-    flex-direction: column;
-    justify-content: center; 
-    align-items: center;
-    
-    /* 3. 테두리 전체 곡선 및 마진(여백) */
-    border-radius: 20px; 
-    margin: 1rem 0rem 2rem 0rem; 
-    
-    color: white; 
-    text-align: center; 
-    padding: 20px;
-}
+        background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
+                          url("https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80");
+        background-size: cover; 
+        background-position: center;
+        height: 250px; 
+        display: flex; 
+        flex-direction: column;
+        justify-content: center; 
+        align-items: center;
+        border-radius: 20px; 
+        margin: 1rem 0rem 2rem 0rem; 
+        color: white; 
+        text-align: center; 
+        padding: 20px;
+    } /* <--- 여기서 중괄호가 닫혀야 합니다! */
+
 
     /* 설문지 카드 */
     .q-card {
