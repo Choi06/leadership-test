@@ -67,9 +67,17 @@ st.markdown("""
 
     /* 일반 버튼 */
     .stButton>button {
-        width: 100%; border-radius: 18px !important; border: none !important;
-        background-color: #F5F5DC !important; color: white !important; height: 3.5rem;
-        font-weight: 700; box-shadow: 0 8px 15px rgba(0,74,124,0.1);
+    width: 100%; 
+    border-radius: 18px !important; 
+    
+    /* 외곽선 추가: 2px 두께, 실선(solid), 파란색(#004A7C) 예시 */
+    border: 2px solid #004A7C !important; 
+    
+    background-color: #F5F5DC !important; 
+    color: #004A7C !important; /* 배경이 밝은 베이지색이므로 글자색도 진하게 변경 제안 */
+    height: 3.5rem;
+    font-weight: 700; 
+    box-shadow: 0 8px 15px rgba(0,74,124,0.1);
     }
 </style>
 """, unsafe_allow_html=True)
