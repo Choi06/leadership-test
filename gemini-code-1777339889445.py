@@ -244,34 +244,36 @@ elif st.session_state.page == 'result':
 elif st.session_state.page == 'dictionary':
     st.header("📚 리더십 대백과사전")
     
-    # [정밀 수정] 페이지 레이아웃은 유지하고 버튼 도형만 가로로 길게 4열 배치
+    # [최종] 모바일 고려 + 가로 4열 강제 + 도형 크기 최적화
     st.markdown("""
         <style>
-        /* 1. 버튼들이 들어가는 컨테이너의 가로 정렬 강제 */
+        /* 1. 모바일에서도 4열이 아래로 떨어지지 않도록 강제 배치 */
         [data-testid="stHorizontalBlock"] {
             display: flex !important;
             flex-direction: row !important;
-            flex-wrap: nowrap !important; /* 아래로 꺾이지 않게 */
-            gap: 8px !important;
+            flex-wrap: nowrap !important;
+            gap: 5px !important; /* 버튼 사이 간격을 좁혀서 도형 공간 확보 */
         }
 
-        /* 2. 각 버튼 도형의 가로 길이를 4등분으로 고정 */
         [data-testid="column"] {
             flex: 1 1 25% !important;
             min-width: 0px !important;
         }
         
-        /* 3. 버튼 자체의 가로 길이를 100%로 채우기 */
+        /* 2. 버튼 도형 크기 최적화 (여백 줄이고 텍스트 정렬) */
         .stButton>button {
             width: 100% !important;
-            font-size: 0.9rem !important; 
+            height: 3.5rem !important;    /* 충분한 높이 확보 */
+            padding: 0px !important;      /* 내부 여백을 없애서 도형이 꽉 차게 */
+            font-size: 0.85rem !important; /* 모바일에서 글자가 잘리지 않는 적정 크기 */
             font-weight: 700 !important;
-            height: 3.5rem !important;
             border-radius: 12px !important;
-            white-space: nowrap !important; /* 글자가 넘쳐도 한 줄 유지 */
+            white-space: nowrap !important;
+            overflow: hidden;
+            text-overflow: ellipsis;      /* 혹시 글자가 길면 말줄임표 처리 */
         }
 
-        /* 버튼과 하단 여백 미세 조절 */
+        /* 3. 버튼 하단 여백 제거 */
         .element-container:has(button) { margin-bottom: 0px !important; }
         </style>
     """, unsafe_allow_html=True)
@@ -290,7 +292,7 @@ elif st.session_state.page == 'dictionary':
 
     st.write("---")
 
-    # --- 여기서부터는 기존에 완성했던 '사진+내용 일체형 카드' 디자인 ---
+    # 인물 정보 출력 (기존 완성된 디자인 유지)
     info = leaders_info[st.session_state.selected_leader]
     
     st.markdown(f'<div class="motto-box">{info["motto"]}</div>', unsafe_allow_html=True)
@@ -310,7 +312,5 @@ elif st.session_state.page == 'dictionary':
     st.markdown(f'<p style="font-weight:700; color:#555;">{hashtags}</p>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
     
-    st.write("<br>", unsafe_allow_html=True)
-    if st.button("홈으로 돌아가기"): go_to('home')
     st.write("<br>", unsafe_allow_html=True)
     if st.button("홈으로 돌아가기"): go_to('home')
