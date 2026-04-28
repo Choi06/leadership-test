@@ -241,52 +241,62 @@ elif st.session_state.page == 'result':
     
     if st.button("홈으로 돌아가기"): go_to('home')
 
+# --- [수정] 2단계로 나뉜 인물 사전 로직 ---
+
+# 1단계: 인물 목록 선택 화면
 elif st.session_state.page == 'dictionary':
     st.header("📚 리더십 대백과사전")
+    st.write("알고 싶은 리더를 선택해주세요.")
     
-    # [수정] 버튼 높이 80% 조정 및 이모지 제거 패치
     st.markdown("""
         <style>
-        /* 1. 페이지 이탈 방지 */
-        [data-testid="column"] {
-            width: 100% !important;
-        }
-        
-        /* 2. 버튼 디자인 (높이를 기존 4rem에서 3.2rem으로 80% 축소) */
         .stButton>button {
             width: 100% !important;
-            height: 3.2rem !important;    /* 기존 대비 80% 수준으로 조정 */
-            font-size: 1rem !important; 
+            height: 3.2rem !important;
+            font-size: 1.1rem !important;
             font-weight: 800 !important;
-            border-radius: 12px !important;
-            margin-bottom: 5px !important;
+            border-radius: 15px !important;
+            margin-bottom: 10px !important;
             border: 1.5px solid #004A7C !important;
-            background-color: #ffffff !important;
-            color: #004A7C !important;
         }
         </style>
     """, unsafe_allow_html=True)
 
-    # 2x2 그리드 배치 (이모지 제거 버전)
+    # 2x2 그리드로 인물 선택 버튼 배치
     col1, col2 = st.columns(2)
     with col1:
-        if st.button("정주영"): st.session_state.selected_leader = 'Pioneer'
-        if st.button("구인회"): st.session_state.selected_leader = 'Harmonizer'
+        if st.button("정주영"):
+            st.session_state.selected_leader = 'Pioneer'
+            go_to('leader_detail')
+        if st.button("구인회"):
+            st.session_state.selected_leader = 'Harmonizer'
+            go_to('leader_detail')
     with col2:
-        if st.button("이병철"): st.session_state.selected_leader = 'Architect'
-        if st.button("박태준"): st.session_state.selected_leader = 'Steward'
+        if st.button("이병철"):
+            st.session_state.selected_leader = 'Architect'
+            go_to('leader_detail')
+        if st.button("박태준"):
+            st.session_state.selected_leader = 'Steward'
+            go_to('leader_detail')
+    
+    st.write("<br>", unsafe_allow_html=True)
+    if st.button("⬅️ 홈으로 돌아가기"):
+        go_to('home')
 
-    st.write("---")
-
-    # 선택된 인물 정보 출력 (일체화 디자인 유지)
+# 2단계: 선택한 리더의 상세 정보 화면
+elif st.session_state.page == 'leader_detail':
     info = leaders_info[st.session_state.selected_leader]
     
+    st.header(f"📖 {info['name']}")
+    
+    # 좌우명 박스
     st.markdown(f'<div class="motto-box">{info["motto"]}</div>', unsafe_allow_html=True)
     
+    # 상세 정보 카드 (사진 + 내용)
     st.markdown('<div class="bio-card">', unsafe_allow_html=True)
     display_leader_image(info['img'])
     
-    st.markdown(f'<div class="section-header">📍 1. 그의 생애 ({info["name"]})</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="section-header">📍 1. 그의 생애</div>', unsafe_allow_html=True)
     st.markdown(f'<p style="line-height:1.7; margin-bottom:20px;">{info["bio"]}</p>', unsafe_allow_html=True)
     
     st.markdown('<div class="section-header">💡 2. 리더십 성공 사례</div>', unsafe_allow_html=True)
@@ -299,4 +309,12 @@ elif st.session_state.page == 'dictionary':
     st.markdown('</div>', unsafe_allow_html=True)
     
     st.write("<br>", unsafe_allow_html=True)
-    if st.button("홈으로 돌아가기"): go_to('home')
+    
+    # 하단 내비게이션 버튼
+    c1, c2 = st.columns(2)
+    with c1:
+        if st.button("⬅️ 목록으로"):
+            go_to('dictionary')
+    with c2:
+        if st.button("🏠 홈으로"):
+            go_to('home')
