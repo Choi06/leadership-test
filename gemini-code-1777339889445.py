@@ -243,15 +243,43 @@ elif st.session_state.page == 'result':
 
 elif st.session_state.page == 'dictionary':
     st.header("📚 리더십 대백과사전")
+    
+    # [수정] 모바일에서도 가로 배치를 강제하는 CSS 추가
+    st.markdown("""
+        <style>
+        .horizontal-menu {
+            display: flex;
+            justify-content: space-between;
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+        .menu-item {
+            flex: 1;
+        }
+        /* 스트림릿 버튼이 모바일에서 100% 차는 것을 방지 */
+        div[data-testid="column"] {
+            min-width: 0 !important;
+            flex-basis: 23% !important;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+
+    # 가로 배치를 위해 컬럼 생성 시 gap을 줄임
     tabs = st.columns(4)
     names = ["정주영", "이병철", "구인회", "박태준"]
     keys = ["Pioneer", "Architect", "Harmonizer", "Steward"]
+    
     for i in range(4):
-        if tabs[i].button(names[i]): st.session_state.selected_leader = keys[i]
+        with tabs[i]:
+            # 버튼 안의 글자가 잘리지 않도록 이름을 성 제외하고 넣거나 폰트 조절
+            if st.button(names[i]): 
+                st.session_state.selected_leader = keys[i]
             
+    # --- 인물 정보 표시 로직은 동일 ---
     info = leaders_info[st.session_state.selected_leader]
     st.markdown(f'<div class="motto-box">{info["motto"]}</div>', unsafe_allow_html=True)
     display_leader_image(info['img'])
+    
     st.markdown('<div class="bio-card">', unsafe_allow_html=True)
     st.markdown(f'<div class="section-header">📍 1. 그의 생애 ({info["name"]})</div>', unsafe_allow_html=True)
     st.markdown(f'<p style="line-height:1.7;">{info["bio"]}</p>', unsafe_allow_html=True)
@@ -260,4 +288,5 @@ elif st.session_state.page == 'dictionary':
     st.markdown(f'<div class="section-header">🏷️ 3. 리더십 키워드</div>', unsafe_allow_html=True)
     st.markdown(f'<p style="font-weight:700; color:#555;">{info["hashtags"]}</p>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
+    
     if st.button("홈으로 돌아가기"): go_to('home')
