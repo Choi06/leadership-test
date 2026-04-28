@@ -16,6 +16,11 @@ st.markdown("""
     }
     .stApp { background-color: #F8F9FB; }
     
+    /* 1. 핵심: 전체 요소 사이의 기본 간격 줄이기 */
+    [data-testid="stVerticalBlock"] {
+        gap: 0.5rem !important;
+    }
+
     /* 시작 화면 Hero */
     .hero-section {
         background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
@@ -28,12 +33,18 @@ st.markdown("""
         justify-content: center; 
         align-items: center;
         border-radius: 20px; 
-        margin: 1rem 0rem 0.5rem 0rem; 
+        
+        /* 마진을 0으로 설정 */
+        margin: 1rem 0rem 0rem 0rem !important; 
         color: white; 
         text-align: center; 
         padding: 20px;
-    } /* <--- 여기서 중괄호가 닫혀야 합니다! */
+    }
 
+    /* 2. 버튼 상단 마진 강제 제거 */
+    .stButton {
+        margin-top: -10px !important;
+    }
 
     /* 설문지 카드 */
     .q-card {
@@ -49,7 +60,8 @@ st.markdown("""
         border-radius: 12px;
         margin-bottom: 3px;
     }
-
+</style>
+""", unsafe_allow_html=True)
     /* 사전: 좌우명 둥근 사각형 */
     .motto-box {
         background-color: #F0F4F8;
