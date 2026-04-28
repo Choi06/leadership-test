@@ -32,30 +32,20 @@ st.markdown(f"""
     }}
     .stApp {{ background-color: #F8F9FB; }}
     
-    /* [수정] 시작 화면 Hero - 여백 및 전체 사진 출력 설정 */
     .hero-section {{
         background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), 
                           {hero_bg_style};
-        
-        /* 사진 전체가 나오도록 contain으로 설정 */
         background-size: contain; 
         background-repeat: no-repeat;
         background-position: center;
-        
         height: 250px !important; 
         display: flex; 
         flex-direction: column;
         justify-content: center; 
         align-items: center;
-        
-        /* 사각형 모서리 라운드 */
         border-radius: 25px !important; 
-        
-        /* [핵심] 좌우 여백을 주어 인물 사진 크기처럼 조정 */
         margin: 10px auto !important; 
         width: 95%; 
-        
-        /* 텍스트 가독성 */
         color: white !important; 
         text-align: center; 
         padding: 20px;
@@ -125,45 +115,44 @@ st.markdown(f"""
 </style>
 """, unsafe_allow_html=True)
 
-
 # --- 2. 데이터 정의 ---
 if 'page' not in st.session_state: st.session_state.page = 'home'
 if 'survey_step' not in st.session_state: st.session_state.survey_step = 1
 if 'answers' not in st.session_state: st.session_state.answers = {}
+if 'final_results' not in st.session_state: st.session_state.final_results = None
 if 'selected_leader' not in st.session_state: st.session_state.selected_leader = 'Pioneer'
 
 leaders_info = {
     "Pioneer": {
         "name": "정주영 (현대그룹 회장)", 
         "motto": "“이봐, 해봤어?”",
-        "bio": "강원도 통천의 가난한 농가에서 태어난 그는 소 판 돈을 들고 무작정 상경하여 막노동부터 시작했습니다. 이후 쌀가게인 '경일상회'를 거쳐 현대자동차공업사와 현대건설을 설립하며 현대그룹의 기틀을 닦았습니다. 한국 전쟁 이후 폐허가 된 국토를 재건하고, 경부고속도로 건설과 조선소 건립 등 남들이 불가능하다고 했던 대형 프로젝트를 특유의 '현장 중심 실행력'으로 완수하며 대한민국 산업화의 상징이 되었습니다.",
-        "case": "서산 간척지 공사 당시 빠른 물살로 인해 마지막 물막이가 어렵게 되자 고철로 매각될 예정이었던 거대 유조선을 침몰시켜 물길을 막는 기발한 공법을 창안했습니다. 또한 거북선이 그려진 500원권 지폐 한 장으로 영국 은행가들을 설득해 조선소 건립을 위한 차관을 따낸 일화는 전설적인 실행력의 사례로 꼽힙니다.",
-        "hashtags": "#실행력 #현장주의 #불굴의투지 #창의적공법", "img": "images/jung.jpg"
+        "bio": "가난한 농군의 아들로 태어나 현대그룹을 일궈낸 실행력의 상징입니다.",
+        "case": "서산 간척지 물막이 공사를 위한 유조선 공법, 거북선 지폐 차관 유치 등",
+        "hashtags": "#실행력 #현장주의 #불굴의투지", "img": "images/jung.jpg"
     },
     "Architect": {
         "name": "이병철 (삼성그룹 회장)", 
-        "motto": "“인재제일(人才第一), 사업보국(事業報國).”",
-        "bio": "경남 의령의 유복한 가정에서 태어나 일본 유학을 다녀온 지식인이었습니다. 삼성상회를 시작으로 제일제당, 제일모직 등을 설립하며 수입 대체 산업을 일으켰습니다. '기업은 곧 사람'이라는 철학으로 한국 최초의 공채 제도를 도입하고 삼성전자를 설립하여 반도체 산업에 진출했습니다. 철저한 분석과 시스템을 중시하는 경영 스타일로 삼성을 세계적인 기술 기업으로 도약시키는 기반을 마련했습니다.",
-        "case": "1983년 73세의 고령임에도 불구하고 미래 먹거리로 반도체를 점찍고 '도쿄 선언'을 통해 반도체 산업 진출을 선포했습니다. 주변의 극심한 반대와 회의적인 시각에도 불구하고 치밀한 준비와 과감한 투자 시스템을 가동하여 현재 삼성 반도체 신화의 초석을 다졌습니다.",
-        "hashtags": "#전략가 #시스템경영 #인재육성 #선견지명", "img": "images/lee.jpg"
+        "motto": "“인재제일(人才第一).”",
+        "bio": "치밀한 전략과 시스템으로 삼성을 세계적 기업으로 키운 전략가입니다.",
+        "case": "73세의 반도체 투자 결정(도쿄 선언), 삼성 인재 공채 제도 도입 등",
+        "hashtags": "#전략가 #시스템경영 #인재육성", "img": "images/lee.jpg"
     },
     "Harmonizer": {
         "name": "구인회 (LG그룹 회장)", 
         "motto": "“한 번 믿으면 끝까지 믿는다.”",
-        "bio": "경남 진주의 유교적 가풍에서 자라 화합과 신의를 무엇보다 소중히 여겼습니다. 락희화학공업(현 LG화학)과 금성사(현 LG전자)를 설립하며 한국의 화학 및 가전 산업을 개척했습니다. 특히 허씨 가문과의 수십 년간에 걸친 동업을 잡음 하나 없이 성공적으로 이끈 것으로 유명합니다. '인화(人和)'를 경영 이념으로 내세워 구성원들 간의 화합과 신뢰를 바탕으로 안정적인 성장을 추구했습니다.",
-        "case": "기술도 자본도 없던 시절 모두가 수입에만 의존하던 라디오를 우리 기술로 만들겠다고 결심했습니다. 주변의 회의론 속에서도 기술자들을 끝까지 믿고 지원한 결과 한국 최초의 국산 라디오 'A-501'을 생산하는 데 성공했으며 이는 오늘날 가전 강국 대한민국의 시작점이 되었습니다.",
-        "hashtags": "#인화경영 #상생 #신의 #가전개척자", "img": "images/koo.jpg"
+        "bio": "사람을 믿는 '인화 경영'으로 화학과 전자 산업을 개척한 리더입니다.",
+        "case": "허씨 가문과의 신뢰 동업 관계 유지, 국산 라디오 최초 생산 등",
+        "hashtags": "#인화경영 #상생 #신의", "img": "images/koo.jpg"
     },
     "Steward": {
         "name": "박태준 (포스코 명예회장)", 
         "motto": "“짧은 인생을 영원한 조국에.”",
-        "bio": "군인 출신으로 철저한 사명감과 국가관을 지닌 리더였습니다. '제철보국(철을 만들어 나라에 보답한다)'이라는 일념으로 황량한 영일만 모래벌판에 포항제철(현 포스코)을 세웠습니다. 정치적 풍랑 속에서도 오직 제철소 건설이라는 대의를 위해 외압을 막아내며 세계 최고의 경쟁력을 갖춘 제철소를 일궈냈습니다. 평생을 청렴하고 강직하게 살며 공적인 헌신의 표상이 되었습니다.",
-        "case": "포항제철 건설 중 발전설비 송풍 시설에서 부실이 발견되자 완공을 앞둔 구조물을 가차 없이 폭파하고 재시공하게 했습니다. '적당히'라는 타협을 거부하고 세계 최고의 품질을 확보하려는 그의 완벽주의 정신은 포스코가 세계 1위 제철소가 되는 강력한 조직 문화를 만들었습니다.",
-        "hashtags": ["#사명감", "#청렴강직", "#완벽주의", "#제철보국"], "img": "images/park.jpg"
+        "bio": "무결점 사명감으로 한국 철강 산업의 신화를 쓴 강직한 사명가입니다.",
+        "case": "부실 공사 구조물 폭파 재시공, 청렴결백한 제철소 건설 등",
+        "hashtags": "#사명감 #청렴강직 #완벽주의", "img": "images/park.jpg"
     }
 }
 
-# 20문항 리스트
 questions = [
     {"q": "1. 새로운 사업 기회가 보였을 때 당신의 첫 행동은?", "a": "일단 현장에 뛰어들어 시작한다", "b": "성공 가능성을 정밀하게 분석한다", "c": "함께 할 파트너를 먼저 찾는다", "d": "조직의 사명과 원칙에 부합하는지 본다"},
     {"q": "2. 목표 달성을 위해 가장 필요한 것은?", "a": "어떤 난관도 뚫고 나가는 뚝심", "b": "효율적인 시스템과 인재 배치", "c": "구성원들 간의 끈끈한 유대감", "d": "타협하지 않는 정직함과 완벽주의"},
@@ -175,7 +164,7 @@ questions = [
     {"q": "8. 자신의 판단이 틀렸음을 깨달았을 때?", "a": "즉시 인정하고 대안을 실행한다", "b": "분석을 통해 프로세스를 개선한다", "c": "주변의 조언을 수용하고 사과한다", "d": "결과에 책임을 지고 거취를 결정한다"},
     {"q": "9. 팀원을 뽑을 때 가장 중요한 덕목은?", "a": "패기와 근성", "b": "전문성과 분석력", "c": "인성과 배려", "d": "책임감과 정직"},
     {"q": "10. 부하 직원이 실수를 했을 때 교육 방식은?", "a": "혼내고 다시 도전할 기회를 준다", "b": "원인을 짚어주고 매뉴얼을 익히게 한다", "c": "다독이며 스스로 일어설 때까지 기다린다", "d": "공적 책임을 묻고 엄격히 훈계한다"},
-    {"q": "11. 회의를 진행할 때 당신의 스타일은?", "a": "의견을 먼저 제시하고 동참을 구한다", "b": "전문가 보고를 듣고 최적안을 선택한다", "c": "편한 분위기에서 경청한다", "d": "절차를 명확히 하고 결론에 집중한다"},
+    {"q": "11. 회의를 진행할 때 당신의 스타일은?", "a": "의견을 먼저 제시하고 동참을 구한다", "b": "전문가 보고를 듣고 최적안을 선택한다", "c": "편한 분위에서 경청한다", "d": "절차를 명확히 하고 결론에 집중한다"},
     {"q": "12. 팀원들에게 동기를 부여하는 방법은?", "a": "성취감과 보상을 강조한다", "b": "개인의 성장 비전을 제시한다", "c": "소속감과 정을 나눈다", "d": "사회에 기여하는 명분을 강조한다"},
     {"q": "13. 당신에게 '성공'이란 무엇입니까?", "a": "남들이 못하는 것을 해내는 것", "b": "지속 가능한 일등 조직을 만드는 것", "c": "주변과 행복하게 공존하는 것", "d": "역사에 부끄럽지 않은 유산을 남기는 것"},
     {"q": "14. 수익보다 더 중요한 가치가 있다면?", "a": "끊임없는 도전 그 자체", "b": "최고의 인재를 키워내는 것", "c": "사람 사이의 믿음과 신의", "d": "공익을 위한 헌신과 청렴"},
@@ -187,7 +176,6 @@ questions = [
     {"q": "20. 당신이 생각하는 진정한 리더십은?", "a": "앞장서서 이끄는 솔선수범", "b": "뒤에서 지원하는 시스템 경영", "c": "옆에서 함께 걷는 동행", "d": "위에서 중심을 잡는 원칙"}
 ]
 
-# --- 3. 공통 함수 ---
 def go_to(page):
     st.session_state.page = page
     st.rerun()
@@ -196,7 +184,7 @@ def display_leader_image(img_path):
     if os.path.exists(img_path):
         st.image(Image.open(img_path), use_container_width=True)
     else:
-        st.info("📷 인물 사진을 불러오는 중입니다.")
+        st.info("📷 인물 사진 업로드 대기 중")
 
 # --- 4. 메인 렌더링 ---
 if st.session_state.page == 'home':
@@ -211,16 +199,12 @@ elif st.session_state.page == 'survey':
     step = st.session_state.survey_step
     st.markdown(f"### 📋 설문조사 ({step}/4)")
     st.progress(step * 0.25)
-    
-    # 5개씩 1페이지 로직
     start_idx = (step - 1) * 5
     for i in range(start_idx, start_idx + 5):
         st.markdown(f'<div class="q-card"><div class="q-title">QUESTION {i+1}</div>{questions[i]["q"]}</div>', unsafe_allow_html=True)
         st.session_state.answers[i] = st.radio("선택", [questions[i]['a'], questions[i]['b'], questions[i]['c'], questions[i]['d']], key=f"q{i}", label_visibility="collapsed")
     
-    st.write("<br>", unsafe_allow_html=True) # 문항과 버튼 사이 간격
-
-    # [수정] 버튼 배치: 다음(위쪽), 홈으로(아래쪽)
+    st.write("<br>", unsafe_allow_html=True)
     if step < 4:
         if st.button("다음 ➡️"): 
             st.session_state.survey_step += 1
@@ -236,10 +220,26 @@ elif st.session_state.page == 'survey':
                 elif ans == questions[j]['d']: s["Steward"]+=1
             st.session_state.final_results = s
             go_to('result')
-
-    # 홈으로 버튼은 아래쪽에 배치 (오른쪽 정렬 느낌을 원하시면 사이드바나 여백 활용도 가능하지만 위아래가 깔끔합니다)
     if st.button("홈으로"): 
         go_to('home')
+
+# [추가된 섹션] 결과 화면
+elif st.session_state.page == 'result':
+    st.header("🏆 당신의 리더십 모델")
+    res = st.session_state.final_results
+    if res:
+        res_type = max(res, key=res.get)
+        leader = leaders_info[res_type]
+        
+        st.markdown(f'<div class="motto-box">나의 리더십 모델: {leader["name"]}</div>', unsafe_allow_html=True)
+        display_leader_image(leader['img'])
+        st.markdown(f'<div class="bio-card"><p>{leader["bio"]}</p></div>', unsafe_allow_html=True)
+        
+        fig = go.Figure(data=go.Scatterpolar(r=[res['Pioneer'], res['Architect'], res['Harmonizer'], res['Steward']], theta=['개척', '설계', '화합', '원칙'], fill='toself', line=dict(color='#004A7C')))
+        fig.update_layout(polar=dict(radialaxis=dict(visible=False, range=[0, 10])), showlegend=False)
+        st.plotly_chart(fig, config={'staticPlot': True}, use_container_width=True)
+    
+    if st.button("홈으로 돌아가기"): go_to('home')
 
 elif st.session_state.page == 'dictionary':
     st.header("📚 리더십 대백과사전")
@@ -250,19 +250,14 @@ elif st.session_state.page == 'dictionary':
         if tabs[i].button(names[i]): st.session_state.selected_leader = keys[i]
             
     info = leaders_info[st.session_state.selected_leader]
-    
-    st.markdown(f'<div class="motto-box">{info["motto"]}</div>', unsafe_allow_html=True) # 1. 좌우명
-    display_leader_image(info['img']) # 2. 사진
-    
+    st.markdown(f'<div class="motto-box">{info["motto"]}</div>', unsafe_allow_html=True)
+    display_leader_image(info['img'])
     st.markdown('<div class="bio-card">', unsafe_allow_html=True)
     st.markdown(f'<div class="section-header">📍 1. 그의 생애 ({info["name"]})</div>', unsafe_allow_html=True)
     st.markdown(f'<p style="line-height:1.7;">{info["bio"]}</p>', unsafe_allow_html=True)
-    
-    st.markdown('<div class="section-header">💡 2. 리더십 성공 사례</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="section-header">💡 2. 리더십 성공 사례</div>', unsafe_allow_html=True)
     st.markdown(f'<p style="line-height:1.7;">{info["case"]}</p>', unsafe_allow_html=True)
-    
-    st.markdown('<div class="section-header">🏷️ 3. 리더십 키워드</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="section-header">🏷️ 3. 리더십 키워드</div>', unsafe_allow_html=True)
     st.markdown(f'<p style="font-weight:700; color:#555;">{info["hashtags"]}</p>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
-    
     if st.button("홈으로 돌아가기"): go_to('home')
