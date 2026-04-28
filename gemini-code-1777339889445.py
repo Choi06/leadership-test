@@ -17,13 +17,11 @@ if os.path.exists(hero_img_path):
     bin_str = get_base64_of_bin_file(hero_img_path)
     hero_bg_style = f"url('data:image/jpg;base64,{bin_str}')"
 else:
-    # 사진이 없을 때의 비상용 스타일
     hero_bg_style = "linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5))"
 
 # --- 1. 앱 스타일 세팅 ---
 st.set_page_config(page_title="K-Leadership Insight", layout="centered")
 
-# [핵심] f-string 안의 모든 CSS 중괄호는 {{ }} 처럼 두 개씩 써야 합니다.
 st.markdown(f"""
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
 <style>
@@ -34,28 +32,48 @@ st.markdown(f"""
     }}
     .stApp {{ background-color: #F8F9FB; }}
     
+    /* [수정] 시작 화면 Hero - 여백 및 전체 사진 출력 설정 */
     .hero-section {{
-        background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
+        background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), 
                           {hero_bg_style};
-        background-size: cover; 
+        
+        /* 사진 전체가 나오도록 contain으로 설정 */
+        background-size: contain; 
+        background-repeat: no-repeat;
         background-position: center;
+        
         height: 250px !important; 
         display: flex; 
         flex-direction: column;
         justify-content: center; 
         align-items: center;
-        border-radius: 0 0 40px 40px !important; 
-        margin: -6rem -2rem 2rem -2rem !important; 
+        
+        /* 사각형 모서리 라운드 */
+        border-radius: 25px !important; 
+        
+        /* [핵심] 좌우 여백을 주어 인물 사진 크기처럼 조정 */
+        margin: 20px auto !important; 
+        width: 90%; 
+        
+        /* 텍스트 가독성 */
         color: white !important; 
         text-align: center; 
         padding: 20px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.05);
     }}
     
     .hero-section h1 {{
-        font-size: 2.2rem !important;
+        font-size: 1.8rem !important;
         font-weight: 800 !important;
         margin-bottom: 5px !important;
         color: white !important;
+        text-shadow: 1px 1px 5px rgba(0,0,0,0.5);
+    }}
+
+    .hero-section p {{
+        font-size: 1rem !important;
+        color: white !important;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
     }}
 
     .q-card {{
@@ -106,8 +124,6 @@ st.markdown(f"""
     }}
 </style>
 """, unsafe_allow_html=True)
-
-
 
 
 # --- 2. 데이터 정의 ---
