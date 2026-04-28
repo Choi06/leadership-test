@@ -47,7 +47,7 @@ st.markdown("""
         background-color: #F5F5DC !important;
         padding: 10px 15px;
         border-radius: 12px;
-        margin-bottom: 8px;
+        margin-bottom: 3px;
     }
 
     /* 사전: 좌우명 둥근 사각형 */
