@@ -23,7 +23,7 @@ else:
 # --- 1. 앱 스타일 세팅 ---
 st.set_page_config(page_title="K-Leadership Insight", layout="centered")
 
-# f-string을 사용하므로 CSS의 모든 { }는 {{ }}로 작성해야 함
+# [핵심] f-string 안의 모든 CSS 중괄호는 {{ }} 처럼 두 개씩 써야 합니다.
 st.markdown(f"""
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
 <style>
@@ -65,7 +65,6 @@ st.markdown(f"""
     
     .q-title {{ font-weight: 800; font-size: 1rem; color: #004A7C; margin-bottom: 5px; }}
 
-    /* 선택지 베이지색 복구 */
     div[data-baseweb="radio"] {{
         background-color: #F5F5DC !important;
         padding: 10px 15px;
@@ -83,11 +82,16 @@ st.markdown(f"""
         color: #004A7C;
         margin-bottom: 20px;
         border: 1.5px solid #D1D9E0;
-    }
+    }}
 
     .bio-card {{
         background-color: white; padding: 30px; border-radius: 25px;
         box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid #F0F0F0;
+    }}
+
+    .section-header {{
+        font-size: 1.1rem; font-weight: 700; color: #004A7C;
+        margin-top: 25px; margin-bottom: 10px; border-left: 5px solid #F5F5DC; padding-left: 12px;
     }}
 
     .stButton>button {{
@@ -102,6 +106,8 @@ st.markdown(f"""
     }}
 </style>
 """, unsafe_allow_html=True)
+
+
 
 
 # --- 2. 데이터 정의 ---
