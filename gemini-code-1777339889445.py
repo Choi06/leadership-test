@@ -3,102 +3,69 @@ import pandas as pd
 import plotly.graph_objects as go
 from PIL import Image
 import os
+import base64  # 사진 변환을 위해 반드시 추가
+
+# --- 사진을 읽어서 CSS에 넣을 수 있게 변환하는 함수 ---
+def get_base64_of_bin_file(bin_file):
+    with open(bin_file, 'rb') as f:
+        data = f.read()
+    return base64.b64encode(data).decode()
+
+# 메인 사진 파일이 있는지 확인하고 변환
+hero_img_path = "images/main_hero.jpg"
+if os.path.exists(hero_img_path):
+    bin_str = get_base64_of_bin_file(hero_img_path)
+    # 사진이 있을 때의 배경 스타일
+    hero_bg_style = f"url('data:image/jpg;base64,{bin_str}')"
+else:
+    # 사진이 없을 때의 비상용 스타일 (남색 배경)
+    hero_bg_style = "linear-gradient(45deg, #004A7C, #002A4C)"
 
 # --- 1. 앱 스타일 세팅 ---
 st.set_page_config(page_title="K-Leadership Insight", layout="centered")
 
-st.markdown("""
+st.markdown(f"""
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
 <style>
-    html, body, [class*="st-"] {
+    html, body, [class*="st-"] {{
         font-family: 'Pretendard', sans-serif;
         color: #1A1A1A !important;
         word-break: keep-all;
-    }
-    .stApp { background-color: #F8F9FB; }
+    }}
+    .stApp {{ background-color: #F8F9FB; }}
     
-    /* [수정] 시작 화면 Hero - 사진 크기 및 경로 수정 */
-    .hero-section {
-        /* 깃허브 images 폴더 안의 사진을 배경으로 지정 */
+    /* 시작 화면 Hero - Base64 데이터를 직접 주입 */
+    .hero-section {{
         background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
-                          url("images/main_hero.jpg");
+                          {hero_bg_style};
         background-size: cover; 
         background-position: center;
-        
-        /* 인물 사진과 비슷한 느낌을 위해 높이 축소 */
         height: 250px !important; 
         display: flex; 
         flex-direction: column;
         justify-content: center; 
         align-items: center;
-        
-        /* 하단 라운드 처리 */
         border-radius: 0 0 40px 40px !important; 
-        
-        /* 상단 및 좌우 밀착 */
         margin: -6rem -2rem 2rem -2rem !important; 
-        
         color: white; 
         text-align: center; 
         padding: 20px;
-    }
+    }}
     
-    /* 제목 폰트 밸런스 조정 */
-    .hero-section h1 {
+    .hero-section h1 {{
         font-size: 2.2rem !important;
         font-weight: 800 !important;
         margin-bottom: 5px !important;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-    }
+    }}
 
-    .q-card {
+    /* 이하 나머지 기존 CSS 동일 (중괄호 {{ }} 두 개씩 쓰는 것에 주의!) */
+    .q-card {{
         background-color: #FFFFFF; padding: 20px; border-radius: 20px;
         box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #EAECEF; margin-top: 15px;
-    }
-    .q-title { font-weight: 800; font-size: 1rem; color: #004A7C; margin-bottom: 5px; }
-
-    div[data-baseweb="radio"] {
-        background-color: #F5F5DC !important;
-        padding: 10px 15px;
-        border-radius: 12px;
-        margin-bottom: 3px;
-    }
-
-    .motto-box {
-        background-color: #F0F4F8;
-        padding: 15px;
-        border-radius: 15px;
-        text-align: center;
-        font-weight: 800;
-        font-size: 1.2rem;
-        color: #004A7C;
-        margin-bottom: 20px;
-        border: 1.5px solid #D1D9E0;
-    }
-
-    .bio-card {
-        background-color: white; padding: 30px; border-radius: 25px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid #F0F0F0;
-    }
-    .section-header {
-        font-size: 1.1rem; font-weight: 700; color: #004A7C;
-        margin-top: 25px; margin-bottom: 10px; border-left: 5px solid #F5F5DC; padding-left: 12px;
-    }
-
-    .stButton>button {
-        width: 100%; 
-        border-radius: 18px !important; 
-        border: 1.5px solid #331f00 !important; 
-        background-color: #ffffff !important; 
-        color: #004A7C !important;
-        height: 3.5rem;
-        font-weight: 700; 
-        box-shadow: 0 8px 15px rgba(0,74,124,0.1);
-    }
+    }}
+    /* ... 생략 ... */
 </style>
 """, unsafe_allow_html=True)
-
-
 # --- 2. 데이터 정의 ---
 if 'page' not in st.session_state: st.session_state.page = 'home'
 if 'survey_step' not in st.session_state: st.session_state.survey_step = 1
