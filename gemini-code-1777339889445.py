@@ -53,8 +53,7 @@ st.markdown("""
         border-radius: 12px;
         margin-bottom: 3px;
     }
-</style>
-""", unsafe_allow_html=True)
+
     
     /* 사전: 좌우명 둥근 사각형 */
     .motto-box {
