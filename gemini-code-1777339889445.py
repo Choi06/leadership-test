@@ -244,46 +244,35 @@ elif st.session_state.page == 'result':
 elif st.session_state.page == 'dictionary':
     st.header("📚 리더십 대백과사전")
     
-    # [수정] 모바일 무시, 무조건 가로 4열 배치 스타일
+    # [정밀 수정] 페이지 레이아웃은 유지하고 버튼 도형만 가로로 길게 4열 배치
     st.markdown("""
         <style>
-        /* 1. 페이지 전체 좌우 여백을 줄여 버튼 폭을 최대화 */
-        .block-container {
-            padding-left: 1rem !important;
-            padding-right: 1rem !important;
-            max-width: 100% !important;
-        }
-
-        /* 2. 가로 4열 강제 고정 (flex-wrap 차단) */
+        /* 1. 버튼들이 들어가는 컨테이너의 가로 정렬 강제 */
         [data-testid="stHorizontalBlock"] {
             display: flex !important;
-            flex-wrap: nowrap !important;
-            align-items: stretch !important;
-            gap: 10px !important;
+            flex-direction: row !important;
+            flex-wrap: nowrap !important; /* 아래로 꺾이지 않게 */
+            gap: 8px !important;
         }
 
+        /* 2. 각 버튼 도형의 가로 길이를 4등분으로 고정 */
         [data-testid="column"] {
-            width: 25% !important;
             flex: 1 1 25% !important;
             min-width: 0px !important;
         }
         
-        /* 3. 버튼 디자인 (기존 스타일 유지하며 가로 꽉 채움) */
+        /* 3. 버튼 자체의 가로 길이를 100%로 채우기 */
         .stButton>button {
             width: 100% !important;
-            font-size: 1rem !important; 
-            font-weight: 800 !important;
+            font-size: 0.9rem !important; 
+            font-weight: 700 !important;
             height: 3.5rem !important;
-            border-radius: 15px !important;
-            border: 1.5px solid #004A7C !important;
-            background-color: #ffffff !important;
-            color: #004A7C !important;
-            white-space: nowrap !important; /* 글자 줄바꿈 방지 */
+            border-radius: 12px !important;
+            white-space: nowrap !important; /* 글자가 넘쳐도 한 줄 유지 */
         }
 
-        /* 여백 조정 */
-        .element-container:has(button) { margin-bottom: -5px !important; }
-        hr { margin: 15px 0 !important; }
+        /* 버튼과 하단 여백 미세 조절 */
+        .element-container:has(button) { margin-bottom: 0px !important; }
         </style>
     """, unsafe_allow_html=True)
 
@@ -301,7 +290,7 @@ elif st.session_state.page == 'dictionary':
 
     st.write("---")
 
-    # 인물 정보 출력 (기존 디자인 유지)
+    # --- 여기서부터는 기존에 완성했던 '사진+내용 일체형 카드' 디자인 ---
     info = leaders_info[st.session_state.selected_leader]
     
     st.markdown(f'<div class="motto-box">{info["motto"]}</div>', unsafe_allow_html=True)
@@ -321,5 +310,7 @@ elif st.session_state.page == 'dictionary':
     st.markdown(f'<p style="font-weight:700; color:#555;">{hashtags}</p>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
     
+    st.write("<br>", unsafe_allow_html=True)
+    if st.button("홈으로 돌아가기"): go_to('home')
     st.write("<br>", unsafe_allow_html=True)
     if st.button("홈으로 돌아가기"): go_to('home')
