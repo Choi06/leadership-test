@@ -3,7 +3,7 @@ import pandas as pd
 import plotly.graph_objects as go
 from PIL import Image
 import os
-import base64  # 사진 변환을 위해 반드시 추가
+import base64
 
 # --- 사진을 읽어서 CSS에 넣을 수 있게 변환하는 함수 ---
 def get_base64_of_bin_file(bin_file):
@@ -11,19 +11,19 @@ def get_base64_of_bin_file(bin_file):
         data = f.read()
     return base64.b64encode(data).decode()
 
-# 메인 사진 파일이 있는지 확인하고 변환
+# 메인 사진 파일 경로 확인 및 변환
 hero_img_path = "images/main_hero.jpg"
 if os.path.exists(hero_img_path):
     bin_str = get_base64_of_bin_file(hero_img_path)
-    # 사진이 있을 때의 배경 스타일
     hero_bg_style = f"url('data:image/jpg;base64,{bin_str}')"
 else:
-    # 사진이 없을 때의 비상용 스타일 (남색 배경)
-    hero_bg_style = "linear-gradient(45deg, #004A7C, #002A4C)"
+    # 사진이 없을 때의 비상용 스타일
+    hero_bg_style = "linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5))"
 
 # --- 1. 앱 스타일 세팅 ---
 st.set_page_config(page_title="K-Leadership Insight", layout="centered")
 
+# f-string을 사용하므로 CSS의 모든 { }는 {{ }}로 작성해야 함
 st.markdown(f"""
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
 <style>
@@ -34,7 +34,6 @@ st.markdown(f"""
     }}
     .stApp {{ background-color: #F8F9FB; }}
     
-    /* 시작 화면 Hero - Base64 데이터를 직접 주입 */
     .hero-section {{
         background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
                           {hero_bg_style};
@@ -47,7 +46,7 @@ st.markdown(f"""
         align-items: center;
         border-radius: 0 0 40px 40px !important; 
         margin: -6rem -2rem 2rem -2rem !important; 
-        color: white; 
+        color: white !important; 
         text-align: center; 
         padding: 20px;
     }}
@@ -56,16 +55,55 @@ st.markdown(f"""
         font-size: 2.2rem !important;
         font-weight: 800 !important;
         margin-bottom: 5px !important;
+        color: white !important;
     }}
 
-    /* 이하 나머지 기존 CSS 동일 (중괄호 {{ }} 두 개씩 쓰는 것에 주의!) */
     .q-card {{
         background-color: #FFFFFF; padding: 20px; border-radius: 20px;
         box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #EAECEF; margin-top: 15px;
     }}
-    /* ... 생략 ... */
+    
+    .q-title {{ font-weight: 800; font-size: 1rem; color: #004A7C; margin-bottom: 5px; }}
+
+    /* 선택지 베이지색 복구 */
+    div[data-baseweb="radio"] {{
+        background-color: #F5F5DC !important;
+        padding: 10px 15px;
+        border-radius: 12px;
+        margin-bottom: 3px;
+    }}
+
+    .motto-box {{
+        background-color: #F0F4F8;
+        padding: 15px;
+        border-radius: 15px;
+        text-align: center;
+        font-weight: 800;
+        font-size: 1.2rem;
+        color: #004A7C;
+        margin-bottom: 20px;
+        border: 1.5px solid #D1D9E0;
+    }
+
+    .bio-card {{
+        background-color: white; padding: 30px; border-radius: 25px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid #F0F0F0;
+    }}
+
+    .stButton>button {{
+        width: 100%; 
+        border-radius: 18px !important; 
+        border: 1.5px solid #331f00 !important; 
+        background-color: #ffffff !important; 
+        color: #004A7C !important;
+        height: 3.5rem;
+        font-weight: 700; 
+        box-shadow: 0 8px 15px rgba(0,74,124,0.1);
+    }}
 </style>
 """, unsafe_allow_html=True)
+
+
 # --- 2. 데이터 정의 ---
 if 'page' not in st.session_state: st.session_state.page = 'home'
 if 'survey_step' not in st.session_state: st.session_state.survey_step = 1
