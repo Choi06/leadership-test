@@ -28,7 +28,7 @@ st.markdown("""
         justify-content: center; 
         align-items: center;
         border-radius: 20px; 
-        margin: 1rem 0rem 2rem 0rem; 
+        margin: 1rem 0rem 0.5rem 0rem; 
         color: white; 
         text-align: center; 
         padding: 20px;
