@@ -3,6 +3,7 @@ import pandas as pd
 import plotly.graph_objects as go
 from PIL import Image
 import os
+
 # --- 1. 앱 스타일 세팅 ---
 st.set_page_config(page_title="K-Leadership Insight", layout="centered")
 
@@ -16,27 +17,46 @@ st.markdown("""
     }
     .stApp { background-color: #F8F9FB; }
     
-    /* 시작 화면 Hero - 원래 디자인으로 복구 */
+    /* [수정] 시작 화면 Hero - 사진 크기 축소 */
     .hero-section {
+        /* [옵션 1] 외부 이미지 URL 사용 시 (현재 적용) */
         background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
-                          url("https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80");
+                          url("images/main_hero.jpg");
+        
         background-size: cover; 
         background-position: center;
-        height: 350px; 
+        
+        /* [수정] 높이 고정값 축소 (인물 사진 크기와 유사하게) */
+        height: 220px !important; 
+        
+        /* [추가] 모바일 대응: 화면 폭에 맞춰 비율 유지 */
+        aspect-ratio: 16 / 9; 
+        max-height: 250px;
+
         display: flex; 
         flex-direction: column;
         justify-content: center; 
         align-items: center;
         
         /* 하단만 둥글게 */
-        border-radius: 0 0 40px 40px !important; 
+        border-radius: 0 0 30px 30px !important; 
         
         /* 상단/좌우 꽉 차게 밀착 */
-        margin: -6rem -2rem 2rem -2rem !important; 
+        margin: -6rem -2rem 1.5rem -2rem !important; 
         
         color: white; 
         text-align: center; 
-        padding: 20px;
+        padding: 15px;
+    }
+
+    /* 제목 글자 크기 축소 (이미지가 작아졌으므로) */
+    .hero-section h1 {
+        font-size: 2rem !important;
+        margin-bottom: 5px !important;
+    }
+    .hero-section p {
+        font-size: 1rem !important;
+        opacity: 0.9;
     }
 
     /* 설문지 카드 */
@@ -93,6 +113,9 @@ st.markdown("""
     }
 </style>
 """, unsafe_allow_html=True)
+
+# --- 이하 데이터 정의 및 로직 (이전 코드와 동일하므로 생략) ---
+# ... (질문 데이터, leaders_info, 페이지 이동 함수 등) ...
 
 # --- 2. 데이터 정의 ---
 if 'page' not in st.session_state: st.session_state.page = 'home'
