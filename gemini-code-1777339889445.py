@@ -248,13 +248,13 @@ elif st.session_state.page == 'dictionary':
     row1_col1, row1_col2 = st.columns(2)
     row2_col1, row2_col2 = st.columns(2)
     with row1_col1:
-        if st.button("🚜 정주영 (현대)"): st.session_state.selected_leader = 'Pioneer'
+        if st.button("정주영 (현대)"): st.session_state.selected_leader = 'Pioneer'
     with row1_col2:
-        if st.button("💻 이병철 (삼성)"): st.session_state.selected_leader = 'Architect'
+        if st.button("이병철 (삼성)"): st.session_state.selected_leader = 'Architect'
     with row2_col1:
-        if st.button("🤝 구인회 (LG)"): st.session_state.selected_leader = 'Harmonizer'
+        if st.button("구인회 (LG)"): st.session_state.selected_leader = 'Harmonizer'
     with row2_col2:
-        if st.button("🏗️ 박태준 (포스코)"): st.session_state.selected_leader = 'Steward'
+        if st.button("박태준 (포스코)"): st.session_state.selected_leader = 'Steward'
 
     st.write("---")
 
