@@ -17,56 +17,46 @@ st.markdown("""
     }
     .stApp { background-color: #F8F9FB; }
     
-    /* [수정] 시작 화면 Hero - 사진 크기 축소 */
+    /* [수정] 시작 화면 Hero - 사진 크기 및 경로 수정 */
     .hero-section {
-        /* [옵션 1] 외부 이미지 URL 사용 시 (현재 적용) */
-        background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
+        /* 깃허브 images 폴더 안의 사진을 배경으로 지정 */
+        background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
                           url("images/main_hero.jpg");
-        
         background-size: cover; 
         background-position: center;
         
-        /* [수정] 높이 고정값 축소 (인물 사진 크기와 유사하게) */
-        height: 220px !important; 
-        
-        /* [추가] 모바일 대응: 화면 폭에 맞춰 비율 유지 */
-        aspect-ratio: 16 / 9; 
-        max-height: 250px;
-
+        /* 인물 사진과 비슷한 느낌을 위해 높이 축소 */
+        height: 250px !important; 
         display: flex; 
         flex-direction: column;
         justify-content: center; 
         align-items: center;
         
-        /* 하단만 둥글게 */
-        border-radius: 0 0 30px 30px !important; 
+        /* 하단 라운드 처리 */
+        border-radius: 0 0 40px 40px !important; 
         
-        /* 상단/좌우 꽉 차게 밀착 */
-        margin: -6rem -2rem 1.5rem -2rem !important; 
+        /* 상단 및 좌우 밀착 */
+        margin: -6rem -2rem 2rem -2rem !important; 
         
         color: white; 
         text-align: center; 
-        padding: 15px;
+        padding: 20px;
     }
-
-    /* 제목 글자 크기 축소 (이미지가 작아졌으므로) */
+    
+    /* 제목 폰트 밸런스 조정 */
     .hero-section h1 {
-        font-size: 2rem !important;
+        font-size: 2.2rem !important;
+        font-weight: 800 !important;
         margin-bottom: 5px !important;
-    }
-    .hero-section p {
-        font-size: 1rem !important;
-        opacity: 0.9;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
     }
 
-    /* 설문지 카드 */
     .q-card {
         background-color: #FFFFFF; padding: 20px; border-radius: 20px;
         box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #EAECEF; margin-top: 15px;
     }
     .q-title { font-weight: 800; font-size: 1rem; color: #004A7C; margin-bottom: 5px; }
 
-    /* 선택지 라디오 버튼 배경색 변경 (연한 베이지) */
     div[data-baseweb="radio"] {
         background-color: #F5F5DC !important;
         padding: 10px 15px;
@@ -74,8 +64,6 @@ st.markdown("""
         margin-bottom: 3px;
     }
 
-    
-    /* 사전: 좌우명 둥근 사각형 */
     .motto-box {
         background-color: #F0F4F8;
         padding: 15px;
@@ -97,25 +85,19 @@ st.markdown("""
         margin-top: 25px; margin-bottom: 10px; border-left: 5px solid #F5F5DC; padding-left: 12px;
     }
 
-    /* 일반 버튼 */
     .stButton>button {
-    width: 100%; 
-    border-radius: 18px !important; 
-    
-    /* 외곽선 추가: 2px 두께, 실선(solid), 파란색(#004A7C) 예시 */
-    border: 1.5px solid #331f00 !important; 
-    
-    background-color: #ffffff !important; 
-    color: #004A7C !important; /* 배경이 밝은 베이지색이므로 글자색도 진하게 변경 제안 */
-    height: 3.5rem;
-    font-weight: 700; 
-    box-shadow: 0 8px 15px rgba(0,74,124,0.1);
+        width: 100%; 
+        border-radius: 18px !important; 
+        border: 1.5px solid #331f00 !important; 
+        background-color: #ffffff !important; 
+        color: #004A7C !important;
+        height: 3.5rem;
+        font-weight: 700; 
+        box-shadow: 0 8px 15px rgba(0,74,124,0.1);
     }
 </style>
 """, unsafe_allow_html=True)
 
-# --- 이하 데이터 정의 및 로직 (이전 코드와 동일하므로 생략) ---
-# ... (질문 데이터, leaders_info, 페이지 이동 함수 등) ...
 
 # --- 2. 데이터 정의 ---
 if 'page' not in st.session_state: st.session_state.page = 'home'
