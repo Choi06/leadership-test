@@ -243,21 +243,47 @@ elif st.session_state.page == 'result':
 
 elif st.session_state.page == 'dictionary':
     st.header("📚 리더십 대백과사전")
-    tabs = st.columns(4)
-    names = ["정주영", "이병철", "구인회", "박태준"]
-    keys = ["Pioneer", "Architect", "Harmonizer", "Steward"]
-    for i in range(4):
-        if tabs[i].button(names[i]): st.session_state.selected_leader = keys[i]
-            
+    
+    # 2x2 버튼 배치는 그대로 유지
+    row1_col1, row1_col2 = st.columns(2)
+    row2_col1, row2_col2 = st.columns(2)
+    with row1_col1:
+        if st.button("🚜 정주영 (현대)"): st.session_state.selected_leader = 'Pioneer'
+    with row1_col2:
+        if st.button("💻 이병철 (삼성)"): st.session_state.selected_leader = 'Architect'
+    with row2_col1:
+        if st.button("🤝 구인회 (LG)"): st.session_state.selected_leader = 'Harmonizer'
+    with row2_col2:
+        if st.button("🏗️ 박태준 (포스코)"): st.session_state.selected_leader = 'Steward'
+
+    st.write("---")
+
     info = leaders_info[st.session_state.selected_leader]
+    
+    # [수정 포인트 1] 좌우명은 독립된 박스로 상단 배치
     st.markdown(f'<div class="motto-box">{info["motto"]}</div>', unsafe_allow_html=True)
-    display_leader_image(info['img'])
+    
+    # [수정 포인트 2] 카드 시작 전에 이미지를 먼저 배치하거나 카드 안에 포함
+    # 여기서는 사진과 글을 하나의 하얀 카드(.bio-card) 안에 묶어서 일체감을 줍니다.
     st.markdown('<div class="bio-card">', unsafe_allow_html=True)
+    
+    # 카드 내부에서 사진 출력 (카드 테두리 안에 사진이 들어감)
+    display_leader_image(info['img'])
+    
+    # 상세 내용
     st.markdown(f'<div class="section-header">📍 1. 그의 생애 ({info["name"]})</div>', unsafe_allow_html=True)
-    st.markdown(f'<p style="line-height:1.7;">{info["bio"]}</p>', unsafe_allow_html=True)
-    st.markdown(f'<div class="section-header">💡 2. 리더십 성공 사례</div>', unsafe_allow_html=True)
-    st.markdown(f'<p style="line-height:1.7;">{info["case"]}</p>', unsafe_allow_html=True)
-    st.markdown(f'<div class="section-header">🏷️ 3. 리더십 키워드</div>', unsafe_allow_html=True)
-    st.markdown(f'<p style="font-weight:700; color:#555;">{info["hashtags"]}</p>', unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
-    if st.button("홈으로 돌아가기"): go_to('home')
+    st.markdown(f'<p style="line-height:1.7; margin-bottom:20px;">{info["bio"]}</p>', unsafe_allow_html=True)
+    
+    st.markdown('<div class="section-header">💡 2. 리더십 성공 사례</div>', unsafe_allow_html=True)
+    st.markdown(f'<p style="line-height:1.7; margin-bottom:20px;">{info["case"]}</p>', unsafe_allow_html=True)
+    
+    st.markdown('<div class="section-header">🏷️ 3. 리더십 키워드</div>', unsafe_allow_html=True)
+    hashtags = info["hashtags"]
+    if isinstance(hashtags, list): hashtags = " ".join(hashtags)
+    st.markdown(f'<p style="font-weight:700; color:#555;">{hashtags}</p>', unsafe_allow_html=True)
+    
+    st.markdown('</div>', unsafe_allow_html=True) # 카드 닫기
+    
+    st.write("<br>", unsafe_allow_html=True)
+    if st.button("홈으로 돌아가기"): 
+        go_to('home')
