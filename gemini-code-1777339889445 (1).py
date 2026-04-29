@@ -217,11 +217,10 @@ questions = [
 
 # [HOME]
 if st.session_state.page == 'home':
-    # 스타일 태그에서 정의한 .hero-section 클래스만 적용하면 됩니다.
     st.markdown('''
         <div class="hero-section">
-            <h1 style="color:white; margin-bottom:10px;">K-Leadership</h1>
-            <p style="color:rgba(255,255,255,0.8); font-size:1.2rem;">역사를 만든 거인들의 리더십 인사이트</p>
+            <h1 style="color:white !important;">K-Leadership</h1>
+            <p style="color:rgba(255,255,255,0.8) !important; font-size:1.2rem;">역사를 만든 거인들의 리더십 인사이트</p>
         </div>
     ''', unsafe_allow_html=True)
     
@@ -231,14 +230,11 @@ if st.session_state.page == 'home':
         go_to('survey')
     if st.button("📚 리더십 대백과사전"): go_to('dictionary')
 
-# [SURVEY]
 elif st.session_state.page == 'survey':
-    # --- 홈으로 버튼을 맨 위로 배치 ---
     col_home = st.columns([1, 3, 1])
     with col_home[0]:
         if st.button("🏠 홈으로", key="top_home"):
             go_to('home')
-    
     st.write("---")
     
     step = st.session_state.survey_step
