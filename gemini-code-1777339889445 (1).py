@@ -13,22 +13,7 @@ def get_base64_of_bin_file(bin_file):
             data = f.read()
         return base64.b64encode(data).decode()
     return None
-    
-    # --- [홈 화면 전용 이미지 처리 추가] ---
-hero_img_path = "images/main_hero.jpg"  # 사용하실 메인 사진 경로
-bin_str = get_base64_of_bin_file(hero_img_path)
 
-if bin_str:
-    # 사진이 있을 때: 사진 위에 어두운 오버레이를 씌워 글자가 잘 보이게 함
-    hero_bg_css = f"""
-        background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
-        url("data:image/jpg;base64,{bin_str}");
-        background-size: cover;
-        background-position: center;
-    """
-else:
-    # 사진이 없을 때: 기본 남색 배경
-    hero_bg_css = "background-color: #004A7C;"
 def go_to(page):
     st.session_state.page = page
     st.rerun()
@@ -44,7 +29,6 @@ def draw_value_chart(scores, name, color='#FF4B4B'):
         line=dict(color=color),
         opacity=0.5
     ))
-    # 수치가 삐져나가지 않도록 정규화된 척도 사용 (0~10)
     fig.update_layout(
         polar=dict(radialaxis=dict(visible=True, range=[0, 10])),
         showlegend=False,
@@ -57,16 +41,24 @@ def draw_value_chart(scores, name, color='#FF4B4B'):
 def display_leader_image(img_path):
     if os.path.exists(img_path):
         with st.container():
-            # CSS 클래스 적용을 위해 div로 감쌈 (사진 크기 통일)
             st.markdown('<div class="leader-img-container">', unsafe_allow_html=True)
             st.image(Image.open(img_path), use_container_width=True)
             st.markdown('</div>', unsafe_allow_html=True)
     else:
         st.info("📷 사진 파일이 없습니다.")
-
+        
 # --- [2. 앱 스타일 및 레이아웃] ---
 st.set_page_config(page_title="K-Leadership Insight", layout="centered")
 
+# 배경 이미지 Base64 변환
+hero_img_path = "images/main_hero.jpg"
+bin_str = get_base64_of_bin_file(hero_img_path)
+
+if bin_str:
+    hero_bg_style = f'background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("data:image/jpg;base64,{bin_str}");'
+else:
+    hero_bg_style = "background-color: #004A7C;"
+    
 # CSS: 사진 크기 고정 + 버튼 색상 강제
 st.markdown("""
     <style>
