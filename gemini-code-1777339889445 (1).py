@@ -216,24 +216,34 @@ elif st.session_state.page == 'survey':
         st.session_state.answers[i] = st.radio("선택", [questions[i]['a'], questions[i]['b'], questions[i]['c'], questions[i]['d']], key=f"q{i}", label_visibility="collapsed")
     
     st.write("<br>", unsafe_allow_html=True)
-    if step < 4:
-        if st.button("다음 ➡️"): 
-            st.session_state.survey_step += 1
-            st.rerun()
-    else:
-        if st.button("최종 결과 확인하기 🏆"):
-            s = {"Pioneer":0, "Architect":0, "Harmonizer":0, "Steward":0}
-            for j in range(20):
-                ans = st.session_state.answers.get(j)
-                if ans == questions[j]['a']: s["Pioneer"]+=1
-                elif ans == questions[j]['b']: s["Architect"]+=1
-                elif ans == questions[j]['c']: s["Harmonizer"]+=1
-                elif ans == questions[j]['d']: s["Steward"]+=1
-            st.session_state.final_results = s
-            go_to('result')
-    if st.button("홈으로"): 
-        go_to('home')
+# --- 버튼 배치 수정 ---
+    col_prev, col_next = st.columns(2)
 
+    with col_prev:
+        if step > 1:
+            if st.button("⬅️ 이전으로"):
+                st.session_state.survey_step -= 1
+                st.rerun()
+        else:
+            if st.button("🏠 홈으로"):
+                go_to('home')
+
+    with col_next:
+        if step < 4:
+            if st.button("다음으로 ➡️"):
+                st.session_state.survey_step += 1
+                st.rerun()
+        else:
+            if st.button("최종 결과 확인하기 🏆"):
+                s = {"Pioneer":0, "Architect":0, "Harmonizer":0, "Steward":0}
+                for j in range(20):
+                    ans = st.session_state.answers.get(j)
+                    if ans == questions[j]['a']: s["Pioneer"]+=1
+                    elif ans == questions[j]['b']: s["Architect"]+=1
+                    elif ans == questions[j]['c']: s["Harmonizer"]+=1
+                    elif ans == questions[j]['d']: s["Steward"]+=1
+                st.session_state.final_results = s
+                go_to('result')
 # [추가된 섹션] 결과 화면
 elif st.session_state.page == 'result':
     st.header("🏆 당신의 리더십 모델")
