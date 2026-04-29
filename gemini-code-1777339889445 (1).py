@@ -13,7 +13,22 @@ def get_base64_of_bin_file(bin_file):
             data = f.read()
         return base64.b64encode(data).decode()
     return None
+    
+    # --- [홈 화면 전용 이미지 처리 추가] ---
+hero_img_path = "images/main_hero.jpg"  # 사용하실 메인 사진 경로
+bin_str = get_base64_of_bin_file(hero_img_path)
 
+if bin_str:
+    # 사진이 있을 때: 사진 위에 어두운 오버레이를 씌워 글자가 잘 보이게 함
+    hero_bg_css = f"""
+        background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
+        url("data:image/jpg;base64,{bin_str}");
+        background-size: cover;
+        background-position: center;
+    """
+else:
+    # 사진이 없을 때: 기본 남색 배경
+    hero_bg_css = "background-color: #004A7C;"
 def go_to(page):
     st.session_state.page = page
     st.rerun()
