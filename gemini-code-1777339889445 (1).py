@@ -5,24 +5,46 @@ from PIL import Image
 import os
 import base64
 
-# --- 사진을 읽어서 CSS에 넣을 수 있게 변환하는 함수 ---
+# --- [함수 정의] 로직 실행 전에 함수들이 먼저 선언되어야 합니다 ---
+
 def get_base64_of_bin_file(bin_file):
-    with open(bin_file, 'rb') as f:
-        data = f.read()
-    return base64.b64encode(data).decode()
+    if os.path.exists(bin_file):
+        with open(bin_file, 'rb') as f:
+            data = f.read()
+        return base64.b64encode(data).decode()
+    return None
 
-# 메인 사진 파일 경로 확인 및 변환
-hero_img_path = "images/main_hero.jpg"
-if os.path.exists(hero_img_path):
-    bin_str = get_base64_of_bin_file(hero_img_path)
-    hero_bg_style = f"url('data:image/jpg;base64,{bin_str}')"
-else:
-    hero_bg_style = "linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5))"
+def go_to(page):
+    st.session_state.page = page
+    st.rerun()
 
-# --- 1. 앱 스타일 세팅 ---
+def draw_radar_chart(scores, name):
+    categories = ['실행력', '전략성', '포용력', '원칙주의', '창의성']
+    fig = go.Figure()
+    fig.add_trace(go.Scatterpolar(
+        r=scores + [scores[0]],
+        theta=categories + [categories[0]],
+        fill='toself',
+        line=dict(color='#004A7C')
+    ))
+    fig.update_layout(
+        polar=dict(radialaxis=dict(visible=True, range=[0, 10])),
+        showlegend=False,
+        height=350,
+        margin=dict(t=30, b=30, l=30, r=30)
+    )
+    return fig
+
+def display_leader_image(img_path):
+    if os.path.exists(img_path):
+        st.image(Image.open(img_path), use_container_width=True)
+    else:
+        st.info("📷 인물 사진 업로드 대기 중 (images 폴더 확인)")
+
+# --- 1. 앱 스타일 및 보안 세팅 ---
 st.set_page_config(page_title="K-Leadership Insight", layout="centered")
 
-# --- 여기에 추가: 깃허브 아이콘 및 메뉴 숨기기 ---
+# 깃허브 메뉴 숨기기
 hide_st_style = """
             <style>
             #MainMenu {visibility: hidden;}
@@ -32,108 +54,38 @@ hide_st_style = """
             </style>
             """
 st.markdown(hide_st_style, unsafe_allow_html=True)
-# --------------------------------------------
+
+# 배경 이미지 변환
+hero_img_path = "images/main_hero.jpg"
+bin_str = get_base64_of_bin_file(hero_img_path)
+hero_bg_style = f"url('data:image/jpg;base64,{bin_str}')" if bin_str else "linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5))"
+
+# 전역 CSS
 st.markdown(f"""
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
 <style>
-    html, body, [class*="st-"] {{
-        font-family: 'Pretendard', sans-serif;
-        color: #1A1A1A !important;
-        word-break: keep-all;
-    }}
+    html, body, [class*="st-"] {{ font-family: 'Pretendard', sans-serif; color: #1A1A1A !important; word-break: keep-all; }}
     .stApp {{ background-color: #F8F9FB; }}
-    
     .hero-section {{
-        background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), 
-                          {hero_bg_style};
-        background-size: contain; 
-        background-repeat: no-repeat;
-        background-position: center;
-        height: 250px !important; 
-        display: flex; 
-        flex-direction: column;
-        justify-content: center; 
-        align-items: center;
-        border-radius: 25px !important; 
-        margin: 10px auto !important; 
-        width: 95%; 
-        color: white !important; 
-        text-align: center; 
-        padding: 20px;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), {hero_bg_style};
+        background-size: cover; background-position: center; height: 250px !important; 
+        display: flex; flex-direction: column; justify-content: center; align-items: center;
+        border-radius: 25px !important; margin: 10px auto !important; width: 100%; color: white !important;
+        text-align: center; padding: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.05);
     }}
-    
-    .hero-section h1 {{
-        font-size: 1.8rem !important;
-        font-weight: 800 !important;
-        margin-bottom: 5px !important;
-        color: white !important;
-        text-shadow: 1px 1px 5px rgba(0,0,0,0.5);
-    }}
-
-    .hero-section p {{
-        font-size: 1rem !important;
-        color: white !important;
-        text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
-    }}
-
-    .q-card {{
-        background-color: #FFFFFF; padding: 20px; border-radius: 20px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #EAECEF; margin-top: 15px;
-    }}
-    
-    .q-title {{ font-weight: 800; font-size: 1rem; color: #004A7C; margin-bottom: 5px; }}
-
-    div[data-baseweb="radio"] {{
-        background-color: #F5F5DC !important;
-        padding: 10px 15px;
-        border-radius: 12px;
-        margin-bottom: 3px;
-    }}
-
-    .motto-box {{
-        background-color: #F0F4F8;
-        padding: 15px;
-        border-radius: 15px;
-        text-align: center;
-        font-weight: 800;
-        font-size: 1.2rem;
-        color: #004A7C;
-        margin-bottom: 20px;
-        border: 1.5px solid #D1D9E0;
-    }}
-
-    .bio-card {{
-        background-color: white; padding: 30px; border-radius: 25px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid #F0F0F0;
-    }}
-
-    .section-header {{
-        font-size: 1.1rem; font-weight: 700; color: #004A7C;
-        margin-top: 25px; margin-bottom: 10px; border-left: 5px solid #F5F5DC; padding-left: 12px;
-    }}
-
-    .stButton>button {{
-        width: 100%; 
-        border-radius: 18px !important; 
-        border: 1.5px solid #331f00 !important; 
-        background-color: #ffffff !important; 
-        color: #004A7C !important;
-        height: 3.5rem;
-        font-weight: 700; 
-        box-shadow: 0 8px 15px rgba(0,74,124,0.1);
-    }}
+    .hero-section h1 {{ font-size: 2.2rem !important; font-weight: 800 !important; color: white !important; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }}
+    .motto-box {{ background-color: #F0F4F8; padding: 20px; border-radius: 15px; text-align: center; font-weight: 800; font-size: 1.3rem; color: #004A7C; margin-bottom: 25px; border: 1.5px solid #D1D9E0; }}
+    .bio-card {{ background-color: white; padding: 30px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid #F0F0F0; }}
+    .section-header {{ font-size: 1.2rem; font-weight: 700; color: #004A7C; margin-top: 30px; margin-bottom: 15px; border-left: 5px solid #004A7C; padding-left: 12px; }}
+    .stButton>button {{ width: 100%; border-radius: 18px !important; font-weight: 700; height: 3.5rem; }}
 </style>
 """, unsafe_allow_html=True)
 
-# --- 2. 데이터 정의 ---
+# --- 2. 데이터 정의 (내용 보강 버전) ---
 if 'page' not in st.session_state: st.session_state.page = 'home'
 if 'survey_step' not in st.session_state: st.session_state.survey_step = 1
 if 'answers' not in st.session_state: st.session_state.answers = {}
-if 'final_results' not in st.session_state: st.session_state.final_results = None
-if 'selected_leader' not in st.session_state: st.session_state.selected_leader = 'Pioneer'
-
-
+    
 leaders_info = {
     "Pioneer": {
         "name": "정주영 (현대그룹 회장)",
@@ -246,41 +198,40 @@ questions = [
     {"q": "20. 당신이 생각하는 진정한 리더십은?", "a": "앞장서서 이끄는 솔선수범", "b": "뒤에서 지원하는 시스템 경영", "c": "옆에서 함께 걷는 동행", "d": "위에서 중심을 잡는 원칙"}
 ]
 
-def go_to(page):
-    st.session_state.page = page
-    st.rerun()
+# --- 3. 메인 로직 제어 ---
 
-def display_leader_image(img_path):
-    if os.path.exists(img_path):
-        st.image(Image.open(img_path), use_container_width=True)
-    else:
-        st.info("📷 인물 사진 업로드 대기 중")
-
-# --- 4. 메인 렌더링 ---
-# --- 5. 메인 로직 ---
 if st.session_state.page == 'home':
     st.markdown('<div class="hero-section"><h1>K-Leadership</h1><p>역사를 만든 거인들의 인사이트</p></div>', unsafe_allow_html=True)
-    if st.button("🔍 성향 테스트 (START)"): go_to('survey')
-    if st.button("📚 리더십 대백과사전"): go_to('dictionary')
+    st.write("<br>"*2, unsafe_allow_html=True)
+    if st.button("🔍 1. 성향 테스트 (START)"): 
+        st.session_state.survey_step = 1
+        go_to('survey')
+    if st.button("📚 2. 리더십 대백과사전"): go_to('dictionary')
 
 elif st.session_state.page == 'survey':
     step = st.session_state.survey_step
     st.markdown(f"### 📋 설문조사 ({step}/4)")
     st.progress(step * 0.25)
+    
     start_idx = (step - 1) * 5
     for i in range(start_idx, start_idx + 5):
         st.markdown(f'<div class="q-card"><div class="q-title">QUESTION {i+1}</div>{questions[i]["q"]}</div>', unsafe_allow_html=True)
         st.session_state.answers[i] = st.radio("선택", [questions[i]['a'], questions[i]['b'], questions[i]['c'], questions[i]['d']], key=f"q{i}", label_visibility="collapsed")
     
-    col1, col2 = st.columns(2)
-    with col1:
+    st.write("<br>", unsafe_allow_html=True)
+    col_prev, col_next = st.columns(2)
+    with col_prev:
         if step > 1:
-            if st.button("⬅️ 이전으로"): st.session_state.survey_step -= 1; st.rerun()
+            if st.button("⬅️ 이전으로"):
+                st.session_state.survey_step -= 1
+                st.rerun()
         else:
             if st.button("🏠 홈으로"): go_to('home')
-    with col2:
+    with col_next:
         if step < 4:
-            if st.button("다음으로 ➡️"): st.session_state.survey_step += 1; st.rerun()
+            if st.button("다음으로 ➡️"):
+                st.session_state.survey_step += 1
+                st.rerun()
         else:
             if st.button("결과 확인하기 🏆"):
                 s = {"Pioneer":0, "Architect":0, "Harmonizer":0, "Steward":0}
@@ -290,42 +241,71 @@ elif st.session_state.page == 'survey':
                     elif ans == questions[j]['b']: s["Architect"]+=1
                     elif ans == questions[j]['c']: s["Harmonizer"]+=1
                     elif ans == questions[j]['d']: s["Steward"]+=1
-                st.session_state.final_results = s; go_to('result')
+                st.session_state.final_results = s
+                go_to('result')
 
 elif st.session_state.page == 'result':
-    st.header("🏆 테스트 결과")
+    st.header("🏆 당신의 리더십 모델")
     res = st.session_state.get('final_results')
     if res:
         res_type = max(res, key=res.get)
         leader = leaders_info[res_type]
-        st.markdown(f'<div class="motto-box">당신의 모델: {leader["name"]}</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="bio-card">{leader["bio"]}</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="motto-box">나의 리더십 모델: {leader["name"]}</div>', unsafe_allow_html=True)
+        display_leader_image(leader['img'])
+        st.markdown(f'<div class="bio-card"><p>{leader["bio"]}</p></div>', unsafe_allow_html=True)
         st.plotly_chart(draw_radar_chart(leader['scores'], leader['name']), use_container_width=True)
-    if st.button("🏠 홈으로 돌아가기"): go_to('home')
+    if st.button("홈으로 돌아가기"): go_to('home')
 
 elif st.session_state.page == 'dictionary':
     st.header("📚 리더십 대백과사전")
+    st.write("알고 싶은 리더를 선택해주세요.")
     col1, col2 = st.columns(2)
     with col1:
-        if st.button("정주영"): st.session_state.selected_leader = 'Pioneer'; go_to('leader_detail')
-        if st.button("구인회"): st.session_state.selected_leader = 'Harmonizer'; go_to('leader_detail')
+        if st.button("정주영"): 
+            st.session_state.selected_leader = 'Pioneer'
+            go_to('leader_detail')
+        if st.button("구인회"): 
+            st.session_state.selected_leader = 'Harmonizer'
+            go_to('leader_detail')
     with col2:
-        if st.button("이병철"): st.session_state.selected_leader = 'Architect'; go_to('leader_detail')
-        if st.button("박태준"): st.session_state.selected_leader = 'Steward'; go_to('leader_detail')
-    if st.button("🏠 홈으로"): go_to('home')
+        if st.button("이병철"): 
+            st.session_state.selected_leader = 'Architect'
+            go_to('leader_detail')
+        if st.button("박태준"): 
+            st.session_state.selected_leader = 'Steward'
+            go_to('leader_detail')
+    st.write("<br>", unsafe_allow_html=True)
+    if st.button("⬅️ 홈으로 돌아가기"): go_to('home')
 
 elif st.session_state.page == 'leader_detail':
     info = leaders_info[st.session_state.selected_leader]
     st.header(f"📖 {info['name']}")
     st.markdown(f'<div class="motto-box">“{info["motto"]}”</div>', unsafe_allow_html=True)
+    
     st.markdown('<div class="bio-card">', unsafe_allow_html=True)
-    c1, c2 = st.columns([1, 1.2])
-    with c1: display_leader_image(info['img'])
-    with c2: st.plotly_chart(draw_radar_chart(info['scores'], info['name']), use_container_width=True)
-    st.markdown(f'<div class="section-header">📍 개요</div><p>{info["bio"]}</p>', unsafe_allow_html=True)
-    st.markdown('<div class="section-header">📅 타임라인</div>', unsafe_allow_html=True)
-    for year, event in info['timeline']: st.write(f"**{year}** : {event}")
-    st.markdown(f'<div class="section-header">💡 성공 사례</div><p>{info["case"]}</p>', unsafe_allow_html=True)
-    st.markdown(f'<div class="section-header">🏷️ 키워드</div><p>{info["hashtags"]}</p>', unsafe_allow_html=True)
+    col1, col2 = st.columns([1, 1.2])
+    with col1:
+        display_leader_image(info['img'])
+    with col2:
+        st.plotly_chart(draw_radar_chart(info['scores'], info['name']), use_container_width=True)
+    
+    st.markdown('<div class="section-header">📍 1. 개요</div>', unsafe_allow_html=True)
+    st.markdown(f'<p style="line-height:1.7;">{info["bio"]}</p>', unsafe_allow_html=True)
+    
+    st.markdown('<div class="section-header">📅 2. 그의 생애 (타임라인)</div>', unsafe_allow_html=True)
+    for year, event in info['timeline']:
+        st.write(f"**{year}** : {event}")
+    
+    st.markdown('<div class="section-header">💡 3. 리더십 성공 사례</div>', unsafe_allow_html=True)
+    st.markdown(f'<p style="line-height:1.7;">{info["case"]}</p>', unsafe_allow_html=True)
+    
+    st.markdown('<div class="section-header">🏷️ 4. 리더십 키워드</div>', unsafe_allow_html=True)
+    st.markdown(f'<p style="font-weight:700; color:#004A7C;">{info["hashtags"]}</p>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
-    if st.button("⬅️ 목록으로"): go_to('dictionary')
+    
+    st.write("<br>", unsafe_allow_html=True)
+    c1, c2 = st.columns(2)
+    with c1:
+        if st.button("⬅️ 목록으로"): go_to('dictionary')
+    with c2:
+        if st.button("🏠 홈으로"): go_to('home')
