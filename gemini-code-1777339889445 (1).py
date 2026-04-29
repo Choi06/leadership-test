@@ -291,10 +291,10 @@ elif st.session_state.page == 'result':
     
     # 2. 나의 가치 지표 점수 환산
     user_values = [
-        (counts["Pioneer"] / 20) * 10,
-        (counts["Architect"] / 20) * 10,
-        (counts["Harmonizer"] / 20) * 10,
-        (counts["Steward"] / 20) * 10
+        (counts["Pioneer"] / 20) * 20,
+        (counts["Architect"] / 20) * 20,
+        (counts["Harmonizer"] / 20) * 20,
+        (counts["Steward"] / 20) * 20
     ]
     st.markdown(f'<div class="summary-box">당신은 <b>{leader["name"]}</b> 스타일의 리더입니다!</div>', unsafe_allow_html=True)
     
