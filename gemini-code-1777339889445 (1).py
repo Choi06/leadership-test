@@ -5,7 +5,7 @@ from PIL import Image
 import os
 import base64
 
-# --- [1. 유틸리티 함수 정의] ---
+# --- [1. 유틸리티 함수] ---
 
 def get_base64_of_bin_file(bin_file):
     if os.path.exists(bin_file):
@@ -18,8 +18,8 @@ def go_to(page):
     st.session_state.page = page
     st.rerun()
 
-def draw_value_chart(scores, name, color='#004A7C'):
-    # 선지 A, B, C, D에 대응하는 4대 가치 지표 (사각형)
+def draw_value_chart(scores, name, color='#FF4B4B'):
+    # 4대 가치(개척, 설계, 화합, 원칙) 사각형 지표
     categories = ['개척(A)', '설계(B)', '화합(C)', '원칙(D)']
     fig = go.Figure()
     fig.add_trace(go.Scatterpolar(
@@ -33,9 +33,9 @@ def draw_value_chart(scores, name, color='#004A7C'):
     fig.update_layout(
         polar=dict(radialaxis=dict(visible=True, range=[0, 10])),
         showlegend=False,
-        height=300,
-        margin=dict(t=40, b=40, l=45, r=45),
-        title=dict(text=f"<b>{name}</b>", x=0.5, font=dict(size=16))
+        height=350,
+        margin=dict(t=50, b=50, l=50, r=50),
+        title=dict(text=f"<b>{name}</b>", x=0.5, font=dict(size=18, color='#004A7C'))
     )
     return fig
 
@@ -43,49 +43,48 @@ def display_leader_image(img_path):
     if os.path.exists(img_path):
         st.image(Image.open(img_path), use_container_width=True)
     else:
-        st.info("📷 사진 준비 중")
+        st.info("📷 리더의 사진이 images 폴더에 없습니다.")
 
-# --- [2. 앱 설정 및 전역 스타일] ---
+# --- [2. 앱 스타일 및 보안 설정] ---
 st.set_page_config(page_title="K-Leadership Insight", layout="centered")
 
-# 배경 이미지 처리
+# 깃허브 아이콘 및 메뉴 숨기기
+st.markdown("""
+    <style>
+    #MainMenu {visibility: hidden;}
+    header {visibility: hidden;}
+    footer {visibility: hidden;}
+    #stDecoration {display:none;}
+    </style>
+""", unsafe_allow_html=True)
+
+# 배경 이미지 설정
 hero_img_path = "images/main_hero.jpg"
 bin_str = get_base64_of_bin_file(hero_img_path)
 hero_bg_style = f"url('data:image/jpg;base64,{bin_str}')" if bin_str else "linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5))"
 
+# 전역 디자인 (둥근 카드 + 버튼 색상 고정)
 st.markdown(f"""
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
 <style>
-    /* 기본 텍스트 및 레이아웃 */
     html, body, [class*="st-"] {{ font-family: 'Pretendard', sans-serif; color: #1A1A1A !important; }}
     .stApp {{ background-color: #F8F9FB; }}
     
-    /* 깃허브 아이콘 및 메뉴 숨기기 */
-    #MainMenu {{visibility: hidden;}}
-    header {{visibility: hidden;}}
-    footer {{visibility: hidden;}}
-    #stDecoration {{display:none;}}
-
-    /* 히어로 섹션 */
     .hero-section {{
         background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), {hero_bg_style};
         background-size: cover; background-position: center; height: 220px;
         display: flex; flex-direction: column; justify-content: center; align-items: center;
         border-radius: 25px; margin-bottom: 20px; color: white !important; text-align: center;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.05);
     }}
-    .hero-section h1 {{ font-size: 2.2rem !important; font-weight: 800 !important; color: white !important; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }}
 
-    /* 질문 카드 (둥근 사각형) */
     .q-card {{
         background-color: #FFFFFF; padding: 25px; border-radius: 20px;
         border: 1px solid #EAECEF; margin-bottom: 20px;
         box-shadow: 0 4px 12px rgba(0,0,0,0.03);
     }}
-    .q-title {{ font-weight: 800; font-size: 0.85rem; color: #004A7C; margin-bottom: 5px; opacity: 0.6; }}
-    .q-text {{ font-size: 1.1rem; font-weight: 700; margin-bottom: 10px; }}
+    .q-title {{ font-weight: 800; font-size: 0.85rem; color: #004A7C; opacity: 0.6; }}
+    .q-text {{ font-size: 1.1rem; font-weight: 700; margin-top: 5px; }}
 
-    /* 라디오 버튼 선택지 디자인 */
     div[data-baseweb="radio"] {{
         background-color: #F5F5DC !important; padding: 12px 20px !important;
         border-radius: 12px !important; margin-bottom: 8px !important;
@@ -93,20 +92,17 @@ st.markdown(f"""
     }}
     div[data-baseweb="radio"] label p {{ color: #004A7C !important; font-weight: 600 !important; }}
 
-    /* 버튼 스타일 (검정색 방지 강제 지정) */
     .stButton>button {{
         width: 100% !important; border-radius: 15px !important;
         background-color: #FFFFFF !important; color: #004A7C !important;
         height: 3.5rem !important; font-weight: 700 !important;
         border: 1.5px solid #004A7C !important;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.05) !important;
     }}
     .stButton>button:hover {{ background-color: #004A7C !important; color: #FFFFFF !important; }}
 
-    /* 요약 박스 */
     .summary-box {{ 
         background-color: #F0F4F8; padding: 20px; border-radius: 15px; 
-        text-align: center; font-weight: 800; font-size: 1.2rem; color: #004A7C; 
+        text-align: center; font-weight: 800; font-size: 1.3rem; color: #004A7C; 
         border: 1.5px solid #D1D9E0; margin-bottom: 25px;
     }}
 </style>
@@ -233,18 +229,15 @@ questions = [
 
 # --- [4. 페이지 렌더링 로직] ---
 
-# --- [4. 페이지 렌더링] ---
-
-# [홈 화면]
+# [HOME]
 if st.session_state.page == 'home':
-    st.markdown('<div class="hero-section"><h1>K-Leadership</h1><p>역사를 만든 거인들의 리더십 인사이트</p></div>', unsafe_allow_html=True)
-    st.write("<br>"*2, unsafe_allow_html=True)
-    if st.button("🔍 1. 리더십 성향 테스트 (START)"): 
+    st.markdown('<div class="hero-section"><h1>K-Leadership</h1><p>역사를 만든 거인들의 인사이트</p></div>', unsafe_allow_html=True)
+    if st.button("🔍 성향 테스트 시작"): 
         st.session_state.survey_step = 1
         go_to('survey')
-    if st.button("📚 2. 리더십 대백과사전"): go_to('dictionary')
+    if st.button("📚 리더십 대백과사전"): go_to('dictionary')
 
-# [설문 페이지]
+# [SURVEY]
 elif st.session_state.page == 'survey':
     step = st.session_state.survey_step
     st.markdown(f"### 📋 설문 진행 ({step}/4)")
@@ -252,33 +245,32 @@ elif st.session_state.page == 'survey':
     
     start_idx = (step - 1) * 5
     for i in range(start_idx, start_idx + 5):
-        # 질문마다 둥근 사각형 카드 적용
         st.markdown(f'''<div class="q-card">
             <div class="q-title">QUESTION {i+1}</div>
             <div class="q-text">{questions[i]["q"]}</div>
         </div>''', unsafe_allow_html=True)
         st.session_state.answers[i] = st.radio(f"q{i}", 
             [questions[i]['a'], questions[i]['b'], questions[i]['c'], questions[i]['d']], 
-            key=f"radio_{i}", label_visibility="collapsed")
+            key=f"r_{i}", label_visibility="collapsed")
     
     st.write("<br>", unsafe_allow_html=True)
-    col_p, col_n = st.columns(2)
-    with col_p:
+    c_p, c_n = st.columns(2)
+    with c_p:
         if step > 1:
-            if st.button("⬅️ 이전으로"): st.session_state.survey_step -= 1; st.rerun()
+            if st.button("⬅️ 이전"): st.session_state.survey_step -= 1; st.rerun()
         else:
             if st.button("🏠 홈으로"): go_to('home')
-    with col_n:
+    with c_n:
         if step < 4:
-            if st.button("다음으로 ➡️"): st.session_state.survey_step += 1; st.rerun()
+            if st.button("다음 ➡️"): st.session_state.survey_step += 1; st.rerun()
         else:
-            if st.button("결과 확인하기 🏆"): go_to('result')
+            if st.button("결과 확인 🏆"): go_to('result')
 
-# [결과 화면]
+# [RESULT - 리더 사진 + 나의 사각형 지표 배치]
 elif st.session_state.page == 'result':
     st.header("🏆 리더십 분석 결과")
     
-    # 1. 최다 선택지 계산 (유사도 측정)
+    # 1. 유사도 기반 인물 매칭
     counts = {"Pioneer": 0, "Architect": 0, "Harmonizer": 0, "Steward": 0}
     for i in range(20):
         ans = st.session_state.answers.get(i)
@@ -290,24 +282,34 @@ elif st.session_state.page == 'result':
     res_type = max(counts, key=counts.get)
     leader = leaders_info[res_type]
     
-    # 2. 4축 사각형 지표 데이터 준비
+    # 2. 나의 가치 지표 점수 환산
     user_values = [counts["Pioneer"]*2, counts["Architect"]*2, counts["Harmonizer"]*2, counts["Steward"]*2]
-    leader_values = leader.get('value_scores', [10, 5, 5, 5]) # 데이터에 사각형 지표 수치 필요
 
-    st.markdown(f'<div class="summary-box">당신과 가장 유사한 리더는 <b>{leader["name"]}</b> 스타일입니다!</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="summary-box">당신은 <b>{leader["name"]}</b> 스타일의 리더입니다!</div>', unsafe_allow_html=True)
     
-    # 3. 사각형 지표 좌우 비교 레이아웃
-    col_u, col_l = st.columns(2)
-    with col_u:
-        st.plotly_chart(draw_value_chart(user_values, "나의 가치 분포", color='#FF4B4B'), use_container_width=True)
-    with col_l:
-        st.plotly_chart(draw_value_chart(leader_values, f"{leader['name']}의 가치"), use_container_width=True)
+    # 3. [핵심] 리더 사진과 나의 지표 차트 좌우 배치
+    col_img, col_chart = st.columns([1, 1.2]) # 사진과 차트 비율
     
-    st.markdown(f'<div class="q-card"><b>{leader["name"]}의 핵심 인사이트:</b><br>{leader["case"]}</div>', unsafe_allow_html=True)
+    with col_img:
+        st.markdown("**매칭된 리더십 인물**")
+        display_leader_image(leader['img'])
+        st.markdown(f"<div style='text-align:center; font-weight:700; color:#004A7C;'>{leader['name']}</div>", unsafe_allow_html=True)
+        
+    with col_chart:
+        # 나의 4대 가치 평가 척도 그래프
+        st.plotly_chart(draw_value_chart(user_values, "나의 리더십 가치 사각형"), use_container_width=True)
+    
+    # 4. 상세 설명 카드
+    st.markdown(f'''
+        <div class="q-card">
+            <p style="font-size:1.1rem; line-height:1.7;">
+                <b>성향 분석:</b><br>{leader["bio"]}
+            </p>
+            <hr>
+            <p style="font-size:1.1rem; line-height:1.7;">
+                <b>성공 사례로 보는 인사이트:</b><br>{leader["case"]}
+            </p>
+        </div>
+    ''', unsafe_allow_html=True)
     
     if st.button("🏠 홈으로 돌아가기"): go_to('home')
-# [DICTIONARY PAGE]
-elif st.session_state.page == 'dictionary':
-    st.header("📚 리더십 대백과사전")
-    # 인물 선택 버튼들 (st.columns 활용 가능)
-    if st.button("⬅️ 홈으로 돌아가기"): go_to('home')
