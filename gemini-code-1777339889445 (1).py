@@ -225,7 +225,14 @@ questions = [
 
 # [HOME]
 if st.session_state.page == 'home':
-    st.markdown('<div class="hero-section" style="background:#004A7C; color:white; padding:50px; border-radius:25px; text-align:center;"><h1>K-Leadership</h1><p>역사를 만든 거인들의 리더십 인사이트</p></div>', unsafe_allow_html=True)
+    # 스타일 태그에서 정의한 .hero-section 클래스만 적용하면 됩니다.
+    st.markdown('''
+        <div class="hero-section">
+            <h1 style="color:white; margin-bottom:10px;">K-Leadership</h1>
+            <p style="color:rgba(255,255,255,0.8); font-size:1.2rem;">역사를 만든 거인들의 리더십 인사이트</p>
+        </div>
+    ''', unsafe_allow_html=True)
+    
     st.write("<br>", unsafe_allow_html=True)
     if st.button("🔍 성향 테스트 시작"): 
         st.session_state.survey_step = 1
