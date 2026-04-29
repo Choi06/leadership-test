@@ -78,6 +78,18 @@ st.markdown(f"""
     .bio-card {{ background-color: white; padding: 30px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid #F0F0F0; }}
     .section-header {{ font-size: 1.2rem; font-weight: 700; color: #004A7C; margin-top: 30px; margin-bottom: 15px; border-left: 5px solid #004A7C; padding-left: 12px; }}
     .stButton>button {{ width: 100%; border-radius: 18px !important; font-weight: 700; height: 3.5rem; }}
+
+    /* --- 선택지 글자색 수정을 위해 아래 내용을 추가했습니다 --- */
+    div[data-baseweb="radio"] {{
+        background-color: #F5F5DC !important; /* 연베이지 배경 */
+        padding: 10px 15px !important;
+        border-radius: 12px !important;
+        margin-bottom: 5px !important;
+    }}
+    div[data-baseweb="radio"] label p {{
+        color: #004A7C !important; /* 글자색을 진한 파란색으로 강제 지정 */
+        font-weight: 600 !important;
+    }}
 </style>
 """, unsafe_allow_html=True)
 
