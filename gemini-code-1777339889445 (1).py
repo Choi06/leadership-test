@@ -77,7 +77,25 @@ st.markdown(f"""
     .motto-box {{ background-color: #F0F4F8; padding: 20px; border-radius: 15px; text-align: center; font-weight: 800; font-size: 1.3rem; color: #004A7C; margin-bottom: 25px; border: 1.5px solid #D1D9E0; }}
     .bio-card {{ background-color: white; padding: 30px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border: 1px solid #F0F0F0; }}
     .section-header {{ font-size: 1.2rem; font-weight: 700; color: #004A7C; margin-top: 30px; margin-bottom: 15px; border-left: 5px solid #004A7C; padding-left: 12px; }}
-    .stButton>button {{ width: 100%; border-radius: 18px !important; font-weight: 700; height: 3.5rem; }}
+    /* 모든 버튼의 배경색과 글자색을 강제로 고정 */
+    .stButton>button {{
+        width: 100% !important;
+        border-radius: 18px !important;
+        background-color: #FFFFFF !important; /* 배경색: 흰색 */
+        color: #004A7C !important;            /* 글자색: 진한 파란색 */
+        height: 3.5rem !important;
+        font-weight: 700 !important;
+        border: 1.5px solid #004A7C !important; /* 테두리: 진한 파란색 */
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1) !important;
+        transition: all 0.3s ease !important;
+    }}
+
+    /* 버튼에 마우스를 올렸을 때(Hover) 색상 변화 */
+    .stButton>button:hover {{
+        background-color: #004A7C !important; /* 배경색: 진한 파란색으로 변경 */
+        color: #FFFFFF !important;            /* 글자색: 흰색으로 변경 */
+        border-color: #004A7C !important;
+    }}
 
     /* --- 선택지 글자색 수정을 위해 아래 내용을 추가했습니다 --- */
     div[data-baseweb="radio"] {{
