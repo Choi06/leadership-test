@@ -1,8 +1,3 @@
-데이터(리더 정보 및 질문 리스트)를 제외하고, UI 로직과 스타일만 담은 Streamlit 템플릿 코드입니다.
-
-질문마다 둥근 사각형 카드가 적용되었고, 결과 화면에서 본인과 리더의 지표를 좌우로 비교하는 기능, 그리고 버튼 색상 검정색 방지 코드가 모두 포함되어 있습니다.
-
-Python
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
