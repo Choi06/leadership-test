@@ -324,3 +324,58 @@ elif st.session_state.page == 'result':
     ''', unsafe_allow_html=True)
     
     if st.button("🏠 홈으로 돌아가기"): go_to('home')
+
+# [DICTIONARY - 리더십 대백과사전 메인]
+elif st.session_state.page == 'dictionary':
+    st.header("📚 리더십 대백과사전")
+    st.write("대한민국 경제 신화를 써 내려간 거인들의 생애와 철학을 확인하세요.")
+    
+    # 2x2 그리드로 리더 카드 배치
+    col1, col2 = st.columns(2)
+    for idx, (key, info) in enumerate(leaders_info.items()):
+        target_col = col1 if idx % 2 == 0 else col2
+        with target_col:
+            st.markdown(f'''
+                <div class="q-card" style="text-align:center;">
+                    <h3 style="color:#004A7C; margin-bottom:10px;">{info['name']}</h3>
+                    <p style="font-style:italic; color:#666;">{info['motto']}</p>
+                </div>
+            ''', unsafe_allow_html=True)
+            # 인물 클릭 시 상세 페이지로 이동하기 위해 세션에 키 저장
+            if st.button(f"{info['name']} 자세히 보기", key=f"btn_{key}"):
+                st.session_state.selected_leader = key
+                go_to('leader_detail')
+    
+    st.write("<br>", unsafe_allow_html=True)
+    if st.button("🏠 홈으로 돌아가기"): go_to('home')
+
+# [LEADER_DETAIL - 인물 상세 페이지]
+elif st.session_state.page == 'leader_detail':
+    leader_key = st.session_state.get('selected_leader', 'Pioneer')
+    leader = leaders_info[leader_key]
+    
+    st.header(f"📖 {leader['name']}")
+    
+    col_img, col_info = st.columns([1, 1.5])
+    with col_img:
+        display_leader_image(leader['img'])
+        st.markdown(f"<div style='text-align:center; font-weight:700; background:#F0F4F8; padding:10px; border-radius:10px;'>{leader['hashtags']}</div>", unsafe_allow_html=True)
+    
+    with col_info:
+        st.subheader("💡 경영 철학")
+        st.info(leader['motto'])
+        st.markdown(f"**생애 요약:**\n\n{leader['bio']}")
+
+    st.divider()
+    
+    # 타임라인 표시
+    st.subheader("⏳ 주요 연혁")
+    for year, event in leader['timeline']:
+        st.markdown(f"**{year}** : {event}")
+    
+    st.divider()
+    
+    st.subheader("🚀 핵심 성공 사례")
+    st.markdown(f'<div class="q-card">{leader["case"]}</div>', unsafe_allow_html=True)
+    
+    if st.button("⬅️ 사전 목록으로 돌아가기"): go_to('dictionary')
