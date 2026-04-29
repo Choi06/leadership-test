@@ -214,10 +214,10 @@ questions = [
 # [HOME]
 if st.session_state.page == 'home':
     st.markdown('<div class="hero-section"><h1>K-Leadership</h1><p>역사를 만든 거인들의 인사이트</p></div>', unsafe_allow_html=True)
-    if st.button("🔍 성향 테스트 시작"): 
+    if st.button("🔍 나의 리더십 테스트 시작"): 
         st.session_state.survey_step = 1
         go_to('survey')
-    if st.button("📚 리더십 대백과사전"): go_to('dictionary')
+    if st.button("📚 리더십 백과사전"): go_to('dictionary')
 
 elif st.session_state.page == 'survey':
     step = st.session_state.survey_step
