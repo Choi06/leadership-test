@@ -19,7 +19,6 @@ def go_to(page):
     st.rerun()
 
 def draw_value_chart(scores, name, color='#FF4B4B'):
-    # 4대 가치(개척, 설계, 화합, 원칙) 사각형 지표
     categories = ['개척(A)', '설계(B)', '화합(C)', '원칙(D)']
     fig = go.Figure()
     fig.add_trace(go.Scatterpolar(
@@ -30,15 +29,23 @@ def draw_value_chart(scores, name, color='#FF4B4B'):
         line=dict(color=color),
         opacity=0.5
     ))
+    
+    # max_val을 계산하여 범위가 삐져나가지 않게 설정
+    max_val = max(scores) if max(scores) > 10 else 10
+    
     fig.update_layout(
-        polar=dict(radialaxis=dict(visible=True, range=[0, 10])),
+        polar=dict(
+            radialaxis=dict(
+                visible=True, 
+                range=[0, max_val + 2] # 최대값보다 약간 여유 있게 설정
+            )
+        ),
         showlegend=False,
         height=350,
         margin=dict(t=50, b=50, l=50, r=50),
         title=dict(text=f"<b>{name}</b>", x=0.5, font=dict(size=18, color='#004A7C'))
     )
     return fig
-
 def display_leader_image(img_path):
     if os.path.exists(img_path):
         st.image(Image.open(img_path), use_container_width=True)
@@ -283,8 +290,12 @@ elif st.session_state.page == 'result':
     leader = leaders_info[res_type]
     
     # 2. 나의 가치 지표 점수 환산
-    user_values = [counts["Pioneer"]*2, counts["Architect"]*2, counts["Harmonizer"]*2, counts["Steward"]*2]
-
+    user_values = [
+        (counts["Pioneer"] / 20) * 10,
+        (counts["Architect"] / 20) * 10,
+        (counts["Harmonizer"] / 20) * 10,
+        (counts["Steward"] / 20) * 10
+    ]
     st.markdown(f'<div class="summary-box">당신은 <b>{leader["name"]}</b> 스타일의 리더입니다!</div>', unsafe_allow_html=True)
     
     # 3. [핵심] 리더 사진과 나의 지표 차트 좌우 배치
