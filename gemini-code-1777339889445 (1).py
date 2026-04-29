@@ -379,3 +379,5 @@ elif st.session_state.page == 'leader_detail':
     st.markdown(f'<div class="q-card">{leader["case"]}</div>', unsafe_allow_html=True)
     
     if st.button("⬅️ 사전 목록으로 돌아가기"): go_to('dictionary')
+    
+    if st.button("⬅️ 사전 목록으로 돌아가기"): go_to('dictionary')
